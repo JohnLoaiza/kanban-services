@@ -52,18 +52,21 @@ router.post('/:kanbanId', async (req, res) => {
     }
 
     const column = kanban.columns.id(columnId);
-    if (!column) {
-      kanban.columns[0].tasks.push(task);
-    } else {
-      column.tasks.push(task);
-    }
+    const columnToUpdate = column || kanban.columns[0];
+    const newTask = columnToUpdate.tasks.create(task); // Crea la tarea como subdocumento
+    columnToUpdate.tasks.push(newTask); // Añade la tarea a la columna correspondiente
 
     await kanban.save();
 
+    const responseTask = newTask.toObject();
+    responseTask.id = responseTask._id;
+    delete responseTask._id;
+
+    // Notificación externa (si aplica)
     const notificationData = {
       kanbanId,
-      columnId: column ? column._id : kanban.columns[0]._id,
-      task,
+      columnId: columnToUpdate._id,
+      task: responseTask,
       message: 'Se ha insertado una nueva tarea',
     };
 
@@ -77,7 +80,10 @@ router.post('/:kanbanId', async (req, res) => {
       console.error('Error al enviar notificación:', notificationError.message);
     }
 
-    res.status(201).json({ message: 'Tarea creada exitosamente', task });
+    res.status(201).json({
+      message: 'Tarea creada exitosamente',
+      task: responseTask,
+    });
   });
 });
 
@@ -87,8 +93,8 @@ router.put('/:kanbanId/:taskId', async (req, res) => {
     const { kanbanId, taskId } = req.params;
     const updatedTaskData = req.body;
 
-    if (!isValidObjectId(kanbanId)) {
-      return res.status(400).json({ message: 'ID de Kanban inválido' });
+    if (!isValidObjectId(kanbanId) || !isValidObjectId(taskId)) {
+      return res.status(400).json({ message: 'ID de Kanban o Tarea inválido' });
     }
 
     const kanban = await Kanban.findById(kanbanId);
@@ -99,6 +105,7 @@ router.put('/:kanbanId/:taskId', async (req, res) => {
     const column = kanban.columns.find((col) =>
       col.tasks.some((task) => task._id.equals(new ObjectId(taskId)))
     );
+
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
@@ -108,11 +115,22 @@ router.put('/:kanbanId/:taskId', async (req, res) => {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
+    // Actualizar solo las propiedades especificadas
     Object.assign(task, updatedTaskData);
+
     await kanban.save();
-    res.status(200).json({ message: 'Tarea actualizada exitosamente', task });
+
+    const responseTask = task.toObject();
+    responseTask.id = responseTask._id;
+    delete responseTask._id;
+
+    res.status(200).json({
+      message: 'Tarea actualizada exitosamente',
+      task: responseTask,
+    });
   });
 });
+
 
 // Eliminar una tarea específica
 router.delete('/:kanbanId/:taskId', async (req, res) => {

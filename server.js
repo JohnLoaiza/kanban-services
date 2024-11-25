@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const kanbanRoutes = require('./routes/kanbanRoutes');
 const taskRoutes = require('./routes/taskRoutes');
+const requerimentsRoutes = require('./routes/requerimentsRoutes');
+
 const DbConnect = require('./bd/dbConnect');
 
 
@@ -30,6 +32,7 @@ DbConnect.open().then((e) => console.log( e ?'Connected to MongoDB' : 'Error con
 // Routes
 app.use('/api/kanbans', kanbanRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/requeriments', requerimentsRoutes);
 
 
 app.listen(PORT, () => {

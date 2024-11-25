@@ -1,5 +1,23 @@
 const mongoose = require('mongoose');
 
+const requerimentSchema = new mongoose.Schema({
+  title: { type: String, required: false },
+  desp: { type: String, required: false },
+  file: { type: String, required: false },
+  finished: { type: Boolean, required: false },
+  finishedDate: { type: Number, required: false },
+  mandatoryFile: { type: Boolean, required: false },
+  tipologyId: { type: Number, required: false },
+}, {
+  toJSON: {
+    transform: (doc, ret) => {
+      ret.id = ret._id;   // Rename _id to id
+      delete ret._id;      // Remove _id
+      return ret;
+    }
+  }
+})
+
 // Task Schema
 const TaskSchema = new mongoose.Schema({
   baseId: { type: Number, required: false },
@@ -17,20 +35,10 @@ const TaskSchema = new mongoose.Schema({
       nextTaskId: { type: Number, required: false },
       active: { type: Boolean, required: false },
       title: { type: String, required: false },
-      requeriments: { type: [Number], required: false },
+      requeriments: { type: [String], required: false },
     },
   ],
-  requeriments: [
-    {
-      title: { type: String, required: false },
-      desp: { type: String, required: false },
-      file: { type: String, required: false },
-      finished: { type: Boolean, required: false },
-      finishedDate: { type: Number, required: false },
-      mandatoryFile: { type: Boolean, required: false },
-      tipologyId: { type: Number, required: false },
-    },
-  ],
+  requeriments: {type: [requerimentSchema], default: []},
   history: { type: [String], default: [] },
   initDate: { type: Number, required: false },
   movements: { type: [mongoose.Schema.Types.Mixed], default: [] },
@@ -46,6 +54,8 @@ const TaskSchema = new mongoose.Schema({
     }
   }
 });
+
+
 
 // Column Schema
 const ColumnSchema = new mongoose.Schema({

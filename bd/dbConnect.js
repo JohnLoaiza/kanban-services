@@ -26,25 +26,25 @@ class DbConnect {
         }
     }
 
-    static bdProcess =  async(res, process) => {
+    static bdProcess = async (res, process) => {
         {
             const isOpen = await this.open()
             if (isOpen) {
+                await process()
 
-           await  process()
             } else {
-              res.status(500).json({ message: 'No se pudo conectar con la BD'});
-          
+                res.status(500).json({ message: 'No se pudo conectar con la BD' });
+
             }
-           const isClose = await this.close()
-           if (isClose) {
-            console.log('Cerró bd');
-            
-           } else {
-            console.log('No se pudo cerrar bd');
-            
-           }
-          }
+            const isClose = await this.close()
+            if (isClose) {
+                console.log('Cerró bd');
+
+            } else {
+                console.log('No se pudo cerrar bd');
+
+            }
+        }
     }
 }
 

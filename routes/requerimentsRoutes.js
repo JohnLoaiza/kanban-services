@@ -119,6 +119,18 @@ router.put('/:kanbanId/:taskId/:requerimentId', async (req, res) => {
         message: 'Requerimiento actualizado exitosamente',
         requeriment,
       });
+      const notificationData = {
+        kanbanId,
+        columnId: column.id,
+        taskId: taskId,
+        requeriment: requeriment,
+        message: 'Se ha insertado una nueva tarea',
+      };
+  
+      return {
+        eventName: 'updateRequeriment',
+        data : notificationData
+      }
     });
   });
   

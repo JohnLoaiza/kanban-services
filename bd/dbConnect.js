@@ -1,9 +1,11 @@
 
 const mongoose = require('mongoose');
+const axios = require('axios');
+
 
 class DbConnect {
 
-    static db = 'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/?retryWrites=true&w=majority'
+    static db = 'mongodb://localhost/kanbanDB' //'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/?retryWrites=true&w=majority'
     static options = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -35,12 +37,20 @@ class DbConnect {
         }
     }
 
-    static bdProcess = async (res, process) => {
+    static bdProcess = async (res, process ) => {
         {
             const isOpen = await this.open()
             if (isOpen) {
-                await process()
-
+              const notifyData =  await process()
+                try {
+                    const response = await axios.post('https://canales.oportuna.red/oportunadanban', {
+                      actionTodo: notifyData.eventName,
+                      data: notifyData.data,
+                    });
+                    console.log('Notificación enviada:', response.data);
+                  } catch (notificationError) {
+                    console.error('Error al enviar notificación:', notificationError.message);
+                  }
             } else {
                 res.status(500).json({ message: 'No se pudo conectar con la BD' });
 

@@ -20,7 +20,7 @@ const requerimentSchema = new mongoose.Schema({
 
 // Task Schema
 const TaskSchema = new mongoose.Schema({
-  baseId: { type: Number, required: false },
+  baseId: { type: String, required: false },
   title: { type: String, required: true },  // Requerido
   description: { type: String, required: false },
   tags: [

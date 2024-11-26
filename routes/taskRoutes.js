@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Kanban = require('../models/kanban');
 const mongoose = require('mongoose');
-const axios = require('axios');
 const DbConnect = require('../bd/dbConnect');
 const { ObjectId } = mongoose.Types;
 
@@ -40,7 +39,7 @@ router.get('/:kanbanId/:taskId', async (req, res) => {
 router.post('/:kanbanId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId } = req.params;
-    const { columnId, task } = req.body;
+    const  task  = req.body;
 
     if (!isValidObjectId(kanbanId)) {
       return res.status(400).json({ message: 'ID de Kanban inválido' });
@@ -51,8 +50,7 @@ router.post('/:kanbanId', async (req, res) => {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
-    const column = kanban.columns.id(columnId);
-    const columnToUpdate = column || kanban.columns[0];
+    const columnToUpdate =  kanban.columns[0];
     const newTask = columnToUpdate.tasks.create(task); // Crea la tarea como subdocumento
     columnToUpdate.tasks.push(newTask); // Añade la tarea a la columna correspondiente
 
@@ -70,20 +68,17 @@ router.post('/:kanbanId', async (req, res) => {
       message: 'Se ha insertado una nueva tarea',
     };
 
-    try {
-      const response = await axios.post('https://canales.oportuna.red/oportunadanban', {
-        actionTodo: 'newLead',
-        data: notificationData,
-      });
-      console.log('Notificación enviada:', response.data);
-    } catch (notificationError) {
-      console.error('Error al enviar notificación:', notificationError.message);
-    }
+   
 
     res.status(201).json({
       message: 'Tarea creada exitosamente',
       task: responseTask,
     });
+
+    return {
+      eventName: 'newLead',
+      data : notificationData
+    }
   });
 });
 

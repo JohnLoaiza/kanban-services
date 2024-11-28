@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Requeriment Schema
 const RequerimentSchema = new mongoose.Schema({
-  uid: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true, unique: true }, 
   title: { type: String, required: false },
   desp: { type: String, required: false },
   file: { type: String, required: false },
@@ -13,9 +13,9 @@ const RequerimentSchema = new mongoose.Schema({
 }, {
   toJSON: {
     transform: (doc, ret) => {
-      const transformed = { id: ret.uid };  // Start with 'id' at the beginning
+      const transformed = { id: ret.id };  
       delete ret._id;
-      delete ret.uid;
+      delete ret.id;
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
@@ -23,42 +23,42 @@ const RequerimentSchema = new mongoose.Schema({
 });
 
 const TagSchema = new mongoose.Schema({
-  uid: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true, unique: true }, 
   name: { type: String, required: false },
   color: { type: String, required: false },
-},{
+}, {
   toJSON: {
     transform: (doc, ret) => {
-      const transformed = { id: ret.uid };  // Start with 'id' at the beginning
+      const transformed = { id: ret.id };  
       delete ret._id;
-      delete ret.uid;
+      delete ret.id;
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
   }
-})
+});
 
-const RequerimentGroupSchame = new mongoose.Schema( {
-  uid: { type: Number, required: true, unique: true },
+const RequerimentGroupSchame = new mongoose.Schema({
+  id: { type: Number, required: true, unique: true },  
   nextTaskId: { type: Number, required: false },
   active: { type: Boolean, required: false },
   title: { type: String, required: false },
   requeriments: { type: [Number], required: false },
-},{
+}, {
   toJSON: {
     transform: (doc, ret) => {
-      const transformed = { id: ret.uid };  // Start with 'id' at the beginning
+      const transformed = { id: ret.id }; 
       delete ret._id;
-      delete ret.uid;
+      delete ret.id;
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
   }
-})
+});
 
 // Task Schema
 const TaskSchema = new mongoose.Schema({
-  uid: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true, unique: true },  
   title: { type: String, required: true },
   description: { type: String, required: false },
   tags: { type: [TagSchema], required: false },
@@ -74,9 +74,9 @@ const TaskSchema = new mongoose.Schema({
 }, {
   toJSON: {
     transform: (doc, ret) => {
-      const transformed = { id: ret.uid };  // Start with 'id' at the beginning
+      const transformed = { id: ret.id };  
       delete ret._id;
-      delete ret.uid;
+      delete ret.id;
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
@@ -85,7 +85,7 @@ const TaskSchema = new mongoose.Schema({
 
 // Column Schema
 const ColumnSchema = new mongoose.Schema({
-  uid: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true, unique: true },  
   title: { type: String, required: true },
   tasks: { type: [TaskSchema], default: [] },
   adminTasks: { type: [TaskSchema], default: [] },
@@ -101,9 +101,9 @@ const ColumnSchema = new mongoose.Schema({
 }, {
   toJSON: {
     transform: (doc, ret) => {
-      const transformed = { id: ret.uid };  // Start with 'id' at the beginning
+      const transformed = { id: ret.id };  
       delete ret._id;
-      delete ret.uid;
+      delete ret.id;
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
@@ -112,15 +112,15 @@ const ColumnSchema = new mongoose.Schema({
 
 // Kanban Schema
 const KanbanSchema = new mongoose.Schema({
-  uid: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true, unique: true },  
   nombre: { type: String, required: true },
   columns: { type: [ColumnSchema], default: [] },
 }, {
   toJSON: {
     transform: (doc, ret) => {
-      const transformed = { id: ret.uid };  // Start with 'id' at the beginning
+      const transformed = { id: ret.id };  
       delete ret._id;
-      delete ret.uid;
+      delete ret.id;
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }

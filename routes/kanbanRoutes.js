@@ -7,13 +7,13 @@ const DbConnect = require('../bd/dbConnect');
 router.post('/', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     try {
-      // Verificar si ya existe un Kanban con el mismo uid
-      const existingKanban = await Kanban.findOne({ uid: req.body.uid });
+      // Verificar si ya existe un Kanban con el mismo id
+      const existingKanban = await Kanban.findOne({ id: req.body.id });
       if (existingKanban) {
-        return res.status(400).json({ message: 'Ya existe un Kanban con este UID.' });
+        return res.status(400).json({ message: 'Ya existe un Kanban con este ID.' });
       }
 
-      // Crear el nuevo Kanban si no existe uno con el mismo UID
+      // Crear el nuevo Kanban si no existe uno con el mismo ID
       const kanban = new Kanban(req.body);
       const savedKanban = await kanban.save();
 
@@ -36,13 +36,13 @@ router.get('/', async (req, res) => {
   });
 });
 
-// Obtener un Kanban por UID
+// Obtener un Kanban por ID
 router.get('/:id', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const kanbanId = req.params.id;
 
-    // Buscar por uid en lugar de _id
-    const kanban = await Kanban.findOne({ uid: kanbanId });
+    // Buscar por id en lugar de _id
+    const kanban = await Kanban.findOne({ id: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
@@ -51,14 +51,14 @@ router.get('/:id', async (req, res) => {
   });
 });
 
-// Actualizar un Kanban por UID
+// Actualizar un Kanban por ID
 router.put('/:id', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const kanbanId = req.params.id;
 
-    // Buscar y actualizar por uid
+    // Buscar y actualizar por id
     const updatedKanban = await Kanban.findOneAndUpdate(
-      { uid: kanbanId },
+      { id: kanbanId },
       req.body,
       { new: true }
     );
@@ -71,13 +71,13 @@ router.put('/:id', async (req, res) => {
   });
 });
 
-// Eliminar un Kanban por UID
+// Eliminar un Kanban por ID
 router.delete('/:id', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const kanbanId = req.params.id;
 
-    // Buscar y eliminar por uid
-    const result = await Kanban.findOneAndDelete({ uid: kanbanId });
+    // Buscar y eliminar por id
+    const result = await Kanban.findOneAndDelete({ id: kanbanId });
     if (!result) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }

@@ -9,24 +9,24 @@ const { ObjectId } = mongoose.Types;
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 // Obtener una tarea específica
-router.get('/:kanbanId/:taskUid', async (req, res) => {
+router.get('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanId, taskUid } = req.params;
+    const { kanbanId, taskId } = req.params;
 
-    const kanban = await Kanban.findOne({ uid: kanbanId });
+    const kanban = await Kanban.findOne({ id: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.uid === taskUid)
+      col.tasks.some((task) => task.id === taskId)
     );
 
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.find((task) => task.uid === taskUid);
+    const task = column.tasks.find((task) => task.id === taskId);
     res.status(200).json({ success: true, task });
   });
 });
@@ -38,7 +38,7 @@ router.post('/:kanbanId', async (req, res) => {
     const { kanbanId } = req.params;
     const task = req.body;
 
-    const kanban = await Kanban.findOne({ uid: kanbanId });
+    const kanban = await Kanban.findOne({ id: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
@@ -57,25 +57,25 @@ router.post('/:kanbanId', async (req, res) => {
 });
 
 // Actualizar una tarea específica
-router.put('/:kanbanId/:taskUid', async (req, res) => {
+router.put('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanId, taskUid } = req.params;
+    const { kanbanId, taskId } = req.params;
     const updatedTaskData = req.body;
 
-    const kanban = await Kanban.findOne({ uid: kanbanId });
+    const kanban = await Kanban.findOne({ id: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.uid === taskUid)
+      col.tasks.some((task) => task.id === taskId)
     );
 
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.find((task) => task.uid === taskUid);
+    const task = column.tasks.find((task) => task.id === taskId);
     if (!task) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
@@ -95,23 +95,23 @@ router.put('/:kanbanId/:taskUid', async (req, res) => {
 
 
 // Eliminar una tarea específica
-router.delete('/:kanbanId/:taskUid', async (req, res) => {
+router.delete('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanId, taskUid } = req.params;
+    const { kanbanId, taskId } = req.params;
 
-    const kanban = await Kanban.findOne({ uid: kanbanId });
+    const kanban = await Kanban.findOne({ id: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.uid === taskUid)
+      col.tasks.some((task) => task.id === taskId)
     );
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const taskIndex = column.tasks.findIndex((task) => task.uid === taskUid);
+    const taskIndex = column.tasks.findIndex((task) => task.id === taskId);
     if (taskIndex === -1) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }

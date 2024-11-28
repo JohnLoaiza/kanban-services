@@ -4,25 +4,25 @@ const Kanban = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 
 // Obtener un requerimiento específico
-router.get('/:kanbanUid/:taskUid/:requerimentUid', async (req, res) => {
+router.get('/:kanbanUid/:taskId/:requerimentId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanUid, taskUid, requerimentUid } = req.params;
+    const { kanbanUid, taskId, requerimentId } = req.params;
 
-    const kanban = await Kanban.findOne({ uid: parseInt(kanbanUid, 10) });
+    const kanban = await Kanban.findOne({ id: parseInt(kanbanUid, 10) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.uid === parseInt(taskUid, 10))
+      col.tasks.some((task) => task.id === parseInt(taskId, 10))
     );
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.find((task) => task.uid === parseInt(taskUid, 10));
+    const task = column.tasks.find((task) => task.id === parseInt(taskId, 10));
     const requeriment = task.requeriments.find(
-      (req) => req.uid === parseInt(requerimentUid, 10)
+      (req) => req.id === parseInt(requerimentId, 10)
     );
 
     if (!requeriment) {
@@ -34,56 +34,56 @@ router.get('/:kanbanUid/:taskUid/:requerimentUid', async (req, res) => {
 });
 
 // Crear un nuevo requerimiento
-router.post('/:kanbanUid/:taskUid', async (req, res) => {
+router.post('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanUid, taskUid } = req.params;
+    const { kanbanId, taskId } = req.params;
     const newRequeriment = req.body;
 
-    const kanban = await Kanban.findOne({ uid: parseInt(kanbanUid, 10) });
+    const kanban = await Kanban.findOne({ id: parseInt(kanbanId, 10) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.uid === parseInt(taskUid, 10))
+      col.tasks.some((task) => task.id === parseInt(taskId, 10))
     );
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.find((task) => task.uid === parseInt(taskUid, 10));
+    const task = column.tasks.find((task) => task.id === parseInt(taskId, 10));
    
     task.requeriments.push(newRequeriment);
 
     await kanban.save();
     res.status(201).json({
       message: 'Requerimiento creado exitosamente',
-      requeriment,
+      newRequeriment,
     });
   });
 });
 
 // Actualizar un requerimiento específico
-router.put('/:kanbanUid/:taskUid/:requerimentUid', async (req, res) => {
+router.put('/:kanbanId/:taskId/:requerimentId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanUid, taskUid, requerimentUid } = req.params;
+    const { kanbanId, taskId, requerimentId } = req.params;
     const updatedData = req.body;
 
-    const kanban = await Kanban.findOne({ uid: parseInt(kanbanUid, 10) });
+    const kanban = await Kanban.findOne({ id: parseInt(kanbanId, 10) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.uid === parseInt(taskUid, 10))
+      col.tasks.some((task) => task.id === parseInt(taskId, 10))
     );
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.find((task) => task.uid === parseInt(taskUid, 10));
+    const task = column.tasks.find((task) => task.id === parseInt(taskId, 10));
     const requeriment = task.requeriments.find(
-      (req) => req.uid === parseInt(requerimentUid, 10)
+      (req) => req.id === parseInt(requerimentId, 10)
     );
 
     if (!requeriment) {
@@ -101,25 +101,25 @@ router.put('/:kanbanUid/:taskUid/:requerimentUid', async (req, res) => {
 });
 
 // Eliminar un requerimiento específico
-router.delete('/:kanbanUid/:taskUid/:requerimentUid', async (req, res) => {
+router.delete('/:kanbanId/:taskId/:requerimentId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanUid, taskUid, requerimentUid } = req.params;
+    const { kanbanId, taskId, requerimentId } = req.params;
 
-    const kanban = await Kanban.findOne({ uid: parseInt(kanbanUid, 10) });
+    const kanban = await Kanban.findOne({ id: parseInt(kanbanId, 10) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.uid === parseInt(taskUid, 10))
+      col.tasks.some((task) => task.id === parseInt(taskId, 10))
     );
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.find((task) => task.uid === parseInt(taskUid, 10));
+    const task = column.tasks.find((task) => task.id === parseInt(taskId, 10));
     const requerimentIndex = task.requeriments.findIndex(
-      (req) => req.uid === parseInt(requerimentUid, 10)
+      (req) => req.id === parseInt(requerimentId, 10)
     );
 
     if (requerimentIndex === -1) {

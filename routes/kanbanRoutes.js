@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
     const kanbanId = req.params.id;
 
     // Buscar por id en lugar de _id
-    const kanban = await Kanban.findOne({ id: kanbanId });
+    const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
@@ -58,7 +58,7 @@ router.put('/:id', async (req, res) => {
 
     // Buscar y actualizar por id
     const updatedKanban = await Kanban.findOneAndUpdate(
-      { id: kanbanId },
+      { id: parseInt(kanbanId) },
       req.body,
       { new: true }
     );
@@ -77,7 +77,7 @@ router.delete('/:id', async (req, res) => {
     const kanbanId = req.params.id;
 
     // Buscar y eliminar por id
-    const result = await Kanban.findOneAndDelete({ id: kanbanId });
+    const result = await Kanban.findOneAndDelete({ id: parseInt(kanbanId) });
     if (!result) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }

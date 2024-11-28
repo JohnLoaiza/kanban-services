@@ -44,6 +44,9 @@ class DbConnect {
             const isOpen = await this.open()
             if (isOpen) {
               const notifyData =  await process()
+              console.log('notify data es');
+              console.log(notifyData);
+              
                 try {
                     const response = await axios.post(this.socketUrl, {
                       actionTodo: notifyData.eventName,

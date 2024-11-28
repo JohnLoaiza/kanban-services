@@ -9,103 +9,73 @@ const { ObjectId } = mongoose.Types;
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 // Obtener una tarea específica
-router.get('/:kanbanId/:taskId', async (req, res) => {
+router.get('/:kanbanId/:taskUid', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanId, taskId } = req.params;
+    const { kanbanId, taskUid } = req.params;
 
-    if (!isValidObjectId(kanbanId) || !isValidObjectId(taskId)) {
-      return res.status(400).json({ message: 'ID de Kanban o Tarea inválido' });
-    }
-
-    const kanban = await Kanban.findById(kanbanId);
+    const kanban = await Kanban.findOne({ uid: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task._id.equals(new ObjectId(taskId)))
+      col.tasks.some((task) => task.uid === taskUid)
     );
 
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.find((task) => task._id.equals(new ObjectId(taskId)));
+    const task = column.tasks.find((task) => task.uid === taskUid);
     res.status(200).json({ success: true, task });
   });
 });
+
 
 // Crear una nueva tarea
 router.post('/:kanbanId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId } = req.params;
-    const  task  = req.body;
+    const task = req.body;
 
-    if (!isValidObjectId(kanbanId)) {
-      return res.status(400).json({ message: 'ID de Kanban inválido' });
-    }
-
-    const kanban = await Kanban.findById(kanbanId);
+    const kanban = await Kanban.findOne({ uid: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
-    const columnToUpdate =  kanban.columns[0];
-    const newTask = columnToUpdate.tasks.create(task); // Crea la tarea como subdocumento
-    columnToUpdate.tasks.push(newTask); // Añade la tarea a la columna correspondiente
+    const columnToUpdate = kanban.columns[0];
+    const newTask = columnToUpdate.tasks.create(task); // Crear la tarea como subdocumento
+    columnToUpdate.tasks.push(newTask); // Añadir la tarea a la columna correspondiente
 
     await kanban.save();
 
-    const responseTask = newTask.toObject();
-    responseTask.id = responseTask._id;
-    delete responseTask._id;
-
-    // Notificación externa (si aplica)
-    const notificationData = {
-      kanbanId,
-      columnId: columnToUpdate._id,
-      task: responseTask,
-      message: 'Se ha insertado una nueva tarea',
-    };
-
-   
-
     res.status(201).json({
       message: 'Tarea creada exitosamente',
-      task: responseTask,
+      task: newTask,
     });
-
-    return {
-      eventName: 'newLead',
-      data : notificationData
-    }
   });
 });
 
 // Actualizar una tarea específica
-router.put('/:kanbanId/:taskId', async (req, res) => {
+router.put('/:kanbanId/:taskUid', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanId, taskId } = req.params;
+    const { kanbanId, taskUid } = req.params;
     const updatedTaskData = req.body;
 
-    if (!isValidObjectId(kanbanId) || !isValidObjectId(taskId)) {
-      return res.status(400).json({ message: 'ID de Kanban o Tarea inválido' });
-    }
-
-    const kanban = await Kanban.findById(kanbanId);
+    const kanban = await Kanban.findOne({ uid: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task._id.equals(new ObjectId(taskId)))
+      col.tasks.some((task) => task.uid === taskUid)
     );
 
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.id(taskId);
+    const task = column.tasks.find((task) => task.uid === taskUid);
     if (!task) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
@@ -115,40 +85,33 @@ router.put('/:kanbanId/:taskId', async (req, res) => {
 
     await kanban.save();
 
-    const responseTask = task.toObject();
-    responseTask.id = responseTask._id;
-    delete responseTask._id;
-
     res.status(200).json({
       message: 'Tarea actualizada exitosamente',
-      task: responseTask,
+      task,
     });
   });
 });
 
 
+
 // Eliminar una tarea específica
-router.delete('/:kanbanId/:taskId', async (req, res) => {
+router.delete('/:kanbanId/:taskUid', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanId, taskId } = req.params;
+    const { kanbanId, taskUid } = req.params;
 
-    if (!isValidObjectId(kanbanId)) {
-      return res.status(400).json({ message: 'ID de Kanban inválido' });
-    }
-
-    const kanban = await Kanban.findById(kanbanId);
+    const kanban = await Kanban.findOne({ uid: kanbanId });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task._id.equals(new ObjectId(taskId)))
+      col.tasks.some((task) => task.uid === taskUid)
     );
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const taskIndex = column.tasks.findIndex((task) => task._id.equals(new ObjectId(taskId)));
+    const taskIndex = column.tasks.findIndex((task) => task.uid === taskUid);
     if (taskIndex === -1) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
@@ -159,5 +122,6 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
     res.status(200).json({ message: 'Tarea eliminada exitosamente' });
   });
 });
+
 
 module.exports = router;

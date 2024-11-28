@@ -16,20 +16,8 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// MongoDB connection
-/*
-mongoose.connect('mongodb://localhost/kanbanDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch((err) => console.error('Error connecting to MongoDB:', err));
-*/
-/*
-DbConnect.open().then((e) => console.log( e ?'Connected to MongoDB' : 'Error connect db'))
-.catch((err) => console.error('Error connecting to MongoDB:', err));
-*/
-// Routes
+
+// DbConnect.open()
 app.use('/api/kanbans', kanbanRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/requeriments', requerimentsRoutes);

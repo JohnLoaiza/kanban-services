@@ -5,7 +5,7 @@ const axios = require('axios');
 
 class DbConnect {
 
-    static db = 'mongodb://localhost/kanbanDB' //'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/?retryWrites=true&w=majority'
+    static db = 'mongodb://localhost/kanbanDB7' //  'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/chatsolutions?retryWrites=true&w=majority'
     static options = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -15,6 +15,8 @@ class DbConnect {
             deprecationErrors: true, // Opcional, reporta errores por funciones en desuso
           },
     }
+    static socketUrl = 'https://canales.oportuna.red/oportunadanban'
+
     static open = async () => {
         try {
             await mongoose.connect(this.db, this.options)
@@ -43,7 +45,7 @@ class DbConnect {
             if (isOpen) {
               const notifyData =  await process()
                 try {
-                    const response = await axios.post('https://canales.oportuna.red/oportunadanban', {
+                    const response = await axios.post(this.socketUrl, {
                       actionTodo: notifyData.eventName,
                       data: notifyData.data,
                     });

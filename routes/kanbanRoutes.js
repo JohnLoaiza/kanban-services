@@ -12,13 +12,32 @@ router.post('/', async (req, res) => {
       if (existingKanban) {
         return res.status(400).json({ message: 'Ya existe un Kanban con este ID.' });
       }
-
+      console.log('kanban entrante es');
+      console.log( req.body);
+      
+     var k = req.body
+     
+   
+    
+    
       // Crear el nuevo Kanban si no existe uno con el mismo ID
-      const kanban = new Kanban(req.body);
+      const kanban = new Kanban(k);
+      console.log('en modelo');
+      console.log(kanban);
+      
+   
+      
       const savedKanban = await kanban.save();
-
+      const notificationData = {
+        newKanban: kanban,
+        message: 'Kanban creado correctamente',
+      };
       // Responder con el Kanban guardado
       res.status(201).json(savedKanban);
+      return {
+        eventName: 'newKanban',
+        data: notificationData
+      }
     } catch (error) {
       // Manejo de errores
       console.error(error);

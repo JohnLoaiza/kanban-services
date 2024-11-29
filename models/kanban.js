@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Requeriment Schema
 const RequerimentSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true },
   title: { type: String, required: false },
   desp: { type: String, required: false },
   file: { type: String, required: false },
@@ -32,7 +32,7 @@ const RequerimentSchema = new mongoose.Schema({
 });
 
 const TagSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true },
   name: { type: String, required: false },
   color: { type: String, required: false },
 }, {
@@ -57,7 +57,7 @@ const TagSchema = new mongoose.Schema({
 });
 
 const RequerimentGroupSchame = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true, },
   nextTaskId: { type: Number, required: false },
   active: { type: Boolean, required: false },
   title: { type: String, required: false },
@@ -84,12 +84,12 @@ const RequerimentGroupSchame = new mongoose.Schema({
 });
 
 // History Schema
-const HistorySchema = new mongoose.Schema({ columnId: { type: Number, required: true, unique: true }, taskVersion: [mongoose.Schema.Types.Mixed] })
+const HistorySchema = new mongoose.Schema({ columnId: { type: Number, required: true, }, taskVersion: [mongoose.Schema.Types.Mixed] })
 
 // Task Schema
 const TaskSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
-  baseId: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true, },
+  baseId: { type: Number, required: true },
   title: { type: String, required: true },
   description: { type: String, required: false },
   tags: { type: [TagSchema], required: false },
@@ -125,7 +125,7 @@ const TaskSchema = new mongoose.Schema({
 
 // Column Schema
 const ColumnSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true, },
   title: { type: String, required: true },
   tasks: { type: [TaskSchema], default: [] },
   adminTasks: { type: [TaskSchema], default: [] },
@@ -161,7 +161,7 @@ const ColumnSchema = new mongoose.Schema({
 
 // Kanban Schema
 const KanbanSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true },
   nombre: { type: String, required: true },
   columns: { type: [ColumnSchema], default: [] },
 }, {

@@ -138,7 +138,7 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
   });
 });
 
-// Eliminar una tarea específica
+// Avanzar en estado una tarea específica
 router.post('/:kanbanId/:taskId', async (req, res) => {
   console.log('Se quiere avanzar tarea ');
 

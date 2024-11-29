@@ -151,7 +151,9 @@ router.post('/:kanbanId/:taskId', async (req, res) => {
     const movedTask = await TaskController.taskAdvance(parseInt(kanbanId), parseInt(taskId))
     const notificationData = {
       kanbanId: parseInt(kanbanId),
-      task: movedTask,
+      task: movedTask.task,
+      fromColumnIndex: movedTask.fromColumnIndex,
+      toColumnIndex: movedTask.toColumnIndex,
       message: 'Tarea avanzada a siguiente estado correctamente',
     };
     res.status(200).json({ message: 'Tarea avanzada a siguiente estado correctamente', data: notificationData });

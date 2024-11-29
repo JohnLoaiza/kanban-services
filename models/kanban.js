@@ -19,7 +19,16 @@ const RequerimentSchema = new mongoose.Schema({
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
-  }
+  },
+  toObject: {
+    transform: (doc, ret) => {
+      const transformed = { id: ret.id };  
+      delete ret._id;
+      delete ret.id;
+      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      return transformed;
+    }
+  },
 });
 
 const TagSchema = new mongoose.Schema({
@@ -35,7 +44,16 @@ const TagSchema = new mongoose.Schema({
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
-  }
+  },
+  toObject: {
+    transform: (doc, ret) => {
+      const transformed = { id: ret.id };  
+      delete ret._id;
+      delete ret.id;
+      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      return transformed;
+    }
+  },
 });
 
 const RequerimentGroupSchame = new mongoose.Schema({
@@ -53,7 +71,16 @@ const RequerimentGroupSchame = new mongoose.Schema({
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
-  }
+  },
+  toObject: {
+    transform: (doc, ret) => {
+      const transformed = { id: ret.id };  
+      delete ret._id;
+      delete ret.id;
+      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      return transformed;
+    }
+  },
 });
 
 // Task Schema
@@ -81,7 +108,16 @@ const TaskSchema = new mongoose.Schema({
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
-  }
+  },
+  toObject: {
+    transform: (doc, ret) => {
+      const transformed = { id: ret.id };  
+      delete ret._id;
+      delete ret.id;
+      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      return transformed;
+    }
+  },
 });
 
 // Column Schema
@@ -108,7 +144,16 @@ const ColumnSchema = new mongoose.Schema({
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
-  }
+  },
+  toObject: {
+    transform: (doc, ret) => {
+      const transformed = { id: ret.id };  
+      delete ret._id;
+      delete ret.id;
+      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      return transformed;
+    }
+  },
 });
 
 // Kanban Schema
@@ -125,7 +170,16 @@ const KanbanSchema = new mongoose.Schema({
       Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
       return transformed;
     }
-  }
+  },
+  toObject: {
+    transform: (doc, ret) => {
+      const transformed = { id: ret.id };  
+      delete ret._id;
+      delete ret.id;
+      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      return transformed;
+    }
+  },
 });
 
 const Kanban = mongoose.model('Kanban', KanbanSchema);

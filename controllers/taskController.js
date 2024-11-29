@@ -3,10 +3,11 @@ const Kanban = require('../models/kanban');
 
 
 class TaskController {
-     moveTask = async (kanbanId, taskId) => {
+   static  taskAdvance = async (kanbanId, taskId) => {
         try {
+          const kanbanDB = await Kanban.findOne({ id: parseInt(kanbanId) })
           // Obtener el Kanban completo
-          const kanban = await Kanban.findById(kanbanId);
+          const kanban = kanbanDB.toObject();
           if (!kanban) throw new Error('Kanban no encontrado');
       
           // Buscar la columna actual y la tarea
@@ -16,7 +17,9 @@ class TaskController {
           const fromColumn = kanban.columns[fromColumnIndex];
           const movedTaskIndex = fromColumn.tasks.findIndex(task => task.id === taskId);
           const movedTask = fromColumn.tasks[movedTaskIndex];
-      
+         
+          
+          
           // Determinar la columna de destino
           const toColumnIndex = fromColumnIndex + 1;
           const toColumn = kanban.columns[toColumnIndex];
@@ -24,31 +27,54 @@ class TaskController {
       
           // Validaciones avanzadas
           const advancedCheckResult = this.advancedCheck(movedTask, kanban, fromColumnIndex);
+          console.log('advance check es');
+          console.log(advancedCheckResult);
+          
+          
           if (advancedCheckResult.length > 0 || fromColumnIndex > toColumnIndex) {
             // Actualizar los detalles de la tarea si retrocede
             if (fromColumnIndex > toColumnIndex) {
+              console.log('Va aretroceder tarea');
+              
               const historyEntry = movedTask.history.find(h => h.columnId === toColumn.id);
               if (!historyEntry) throw new Error('No hay historial para retroceder esta tarea');
       
               const { taskVersion } = historyEntry;
               Object.assign(movedTask, structuredClone(taskVersion));
+              console.log('retrocede');
             } else {
+              console.log('va a avanzar tarea');
+              
               // Verificar si es necesario agregar al historial
               const historyExists = movedTask.history.some(h => h.columnId === fromColumn.id);
               if (!historyExists) {
+                console.log('aun no existe historia para este estado');
+                console.log('moved task es');
+                console.log(movedTask);
+             
+               
                 movedTask.history.push({
                   columnId: fromColumn.id,
                   taskVersion: structuredClone(movedTask),
                 });
+                console.log('lo agrega');
+                
               } else {
+                console.log('ya existe historial para este estado');
+                
                 const historyIndex = movedTask.history.findIndex(h => h.columnId === fromColumn.id);
                 movedTask.history[historyIndex].taskVersion = structuredClone(movedTask);
+                console.log('lo toma');
+                
               }
       
               // Verificar tareas avanzadas
               const advanceFilter = advancedCheckResult.map(nextTaskId =>
                 kanban.columns[fromColumnIndex + 1].adminTasks.find(t => t.id === nextTaskId)
               ).filter(Boolean);
+      console.log('filtro de avance es');
+      console.log(advanceFilter);
+      
       
               if (advanceFilter.length === 1) {
                 const schema = advanceFilter[0];
@@ -72,16 +98,44 @@ class TaskController {
           });
       
           // Guardar los cambios
-          await kanban.save();
-          return kanban;
+          const updatedKanban = await Kanban.findOneAndUpdate(
+            { id: parseInt(kanbanId) },
+            kanban,
+            { new: true }
+          );
+          return movedTask;
       
         } catch (error) {
           throw new Error(`Error al mover la tarea: ${error.message}`);
         }
       };
 
+      static removeIds(obj, seen = new WeakSet()) {
+        // Caso base: verificar si ya procesamos este objeto
+        if (seen.has(obj)) return obj;
+      
+        // Verificar si es un objeto o un array
+        if (Array.isArray(obj)) {
+          return obj.map(item => TaskController.removeIds(item, seen)); // Recursión para arrays
+        } else if (typeof obj === 'object' && obj !== null) {
+          seen.add(obj); // Marcar este objeto como procesado
+          const newObj = {};
+          for (const key in obj) {
+            if (key !== '_id') {
+              newObj[key] = TaskController.removeIds(obj[key], seen); // Recursión para objetos anidados
+            }
+          }
+          return newObj;
+        }
+      
+        // Si no es un objeto o array, devolver tal cual
+        return obj;
+      }
+      
+      
 
-      advancedCheck = (task = KanvanTask(),kanban , columnIndex = 0) => {
+
+     static advancedCheck = (task = KanvanTask(),kanban , columnIndex = 0) => {
         var finishedGroup = []
         try {
             const taskBase = kanban.columns[columnIndex].adminTasks.filter((t) => t.id === task.baseId)[0]
@@ -101,3 +155,5 @@ class TaskController {
     }
       
 }
+
+module.exports = TaskController;

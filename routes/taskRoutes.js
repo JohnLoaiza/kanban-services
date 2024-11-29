@@ -3,6 +3,7 @@ const router = express.Router();
 const Kanban = require('../models/kanban');
 const mongoose = require('mongoose');
 const DbConnect = require('../bd/dbConnect');
+const TaskController = require('../controllers/taskController');
 const { ObjectId } = mongoose.Types;
 
 
@@ -11,16 +12,16 @@ router.get('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId, taskId } = req.params;
 
-    const kanban = await Kanban.findOne({ id: parseInt(kanbanId)  });
+    const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
-console.log('kanban es ');
-console.log(kanban);
+    console.log('kanban es ');
+    console.log(kanban);
 
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.id === parseInt(taskId) )
+      col.tasks.some((task) => task.id === parseInt(taskId))
     );
 
     if (!column) {
@@ -62,13 +63,15 @@ router.post('/:kanbanId', async (req, res) => {
     };
     return {
       eventName: 'newLead',
-      data : notificationData
+      data: notificationData
     }
   });
 });
 
 // Actualizar una tarea específica
 router.put('/:kanbanId/:taskId', async (req, res) => {
+  console.log('entra a actualizar');
+  
   DbConnect.bdProcess(res, async () => {
     const { kanbanId, taskId } = req.params;
     const updatedTaskData = req.body;
@@ -123,7 +126,7 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
       return res.status(404).json({ message: 'Tarea no encontrada 1' });
     }
 
-    const taskIndex = column.tasks.findIndex((task) => task.id ===  parseInt(taskId));
+    const taskIndex = column.tasks.findIndex((task) => task.id === parseInt(taskId));
     if (taskIndex === -1) {
       return res.status(404).json({ message: 'Tarea no encontrada 2' });
     }
@@ -132,6 +135,32 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
     await kanban.save();
 
     res.status(200).json({ message: 'Tarea eliminada exitosamente' });
+  });
+});
+
+// Eliminar una tarea específica
+router.post('/:kanbanId/:taskId', async (req, res) => {
+  console.log('Se quiere avanzar tarea ');
+
+  DbConnect.bdProcess(res, async () => {
+    const { kanbanId, taskId } = req.params;
+    console.log(kanbanId);
+    console.log(taskId);
+
+
+    const movedTask = await TaskController.taskAdvance(parseInt(kanbanId), parseInt(taskId))
+    const notificationData = {
+      kanbanId: parseInt(kanbanId),
+      task: movedTask,
+      message: 'Tarea avanzada a siguiente estado correctamente',
+    };
+    res.status(200).json({ message: 'Tarea avanzada a siguiente estado correctamente', data: notificationData });
+
+
+    return {
+      eventName: 'taskAdvance',
+      data: notificationData
+    }
   });
 });
 

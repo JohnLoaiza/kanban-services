@@ -69,21 +69,21 @@ router.put('/:kanbanId/:taskId/:requerimentId', async (req, res) => {
     const { kanbanId, taskId, requerimentId } = req.params;
     const updatedData = req.body;
 
-    const kanban = await Kanban.findOne({ id: parseInt(kanbanId, 10) });
+    const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
 
     const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.id === parseInt(taskId, 10))
+      col.tasks.some((task) => task.id === parseInt(taskId))
     );
     if (!column) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }
 
-    const task = column.tasks.find((task) => task.id === parseInt(taskId, 10));
+    const task = column.tasks.find((task) => task.id === parseInt(taskId));
     const requeriment = task.requeriments.find(
-      (req) => req.id === parseInt(requerimentId, 10)
+      (req) => req.id === parseInt(requerimentId)
     );
 
     if (!requeriment) {
@@ -99,11 +99,11 @@ router.put('/:kanbanId/:taskId/:requerimentId', async (req, res) => {
     });
 
     const notificationData = {
-      kanbanId: parseInt(kanbanId, 10),
+      kanbanId: parseInt(kanbanId),
       columnId: column.id,
-      taskId: parseInt(taskId, 10),
+      taskId: parseInt(taskId),
       requeriment: requeriment,
-      message: 'Se ha insertado una nueva tarea',
+      message: 'Se ha actualizado un requisito',
     };
 
     return {

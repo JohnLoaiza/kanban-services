@@ -59,6 +59,7 @@ const RequerimentGroupSchame = new mongoose.Schema({
 // Task Schema
 const TaskSchema = new mongoose.Schema({
   id: { type: Number, required: true, unique: true },  
+  baseId: { type: Number, required: true, unique: true },  
   title: { type: String, required: true },
   description: { type: String, required: false },
   tags: { type: [TagSchema], required: false },

@@ -97,9 +97,9 @@ export const conectcarga = [
                     "requerimentGroups": [
                       {
                         "id": 800001,
-                        "nextTaskId": 4851686,
+                        "nextTaskId": 600002,
                         "active": true,
-                        "title": "Requisitos 1",
+                        "title": "Continuar",
                         "requeriments": [
                           900001,
                           900002
@@ -107,9 +107,9 @@ export const conectcarga = [
                       },
                       {
                         "id": 800002,
-                        "nextTaskId": 5221845,
+                        "nextTaskId": 600003,
                         "active": true,
-                        "title": "Requisitos 2",
+                        "title": "Cancelar",
                         "requeriments": [
                           900003
                         ]

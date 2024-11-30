@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const kanbanRoutes = require('./routes/kanbanRoutes');
+const adminTasksRoutes = require('./routes/adminTaskRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const requerimentsRoutes = require('./routes/requerimentsRoutes');
 
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 
 // DbConnect.open()
 app.use('/api/kanbans', kanbanRoutes);
+app.use('/api/adminTasks', adminTasksRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/requeriments', requerimentsRoutes);
 

@@ -78,7 +78,7 @@ class TaskController {
 
           if (advanceFilter.length === 1) {
             const schema = advanceFilter[0];
-            const omitProperties = ['id', 'movements', 'history', 'baseId', 'initDate']; // Propiedades que no quieres clonar
+            const omitProperties = ['id', 'movements', 'history', 'baseId', 'initDate', 'tags']; // Propiedades que no quieres clonar
 
             // Primero, clonar la tarea versión
             let taskVersionClone = structuredClone(schema);

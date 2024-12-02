@@ -82,7 +82,7 @@ class TaskController {
 
             // Primero, clonar la tarea versión
             let taskVersionClone = structuredClone(schema);
-
+            movedTask.baseId = structuredClone(taskVersionClone.id)
             // Luego, eliminar las propiedades no deseadas
             omitProperties.forEach(prop => {
               delete taskVersionClone[prop]; // Elimina la propiedad de la clonación
@@ -90,6 +90,7 @@ class TaskController {
             console.log();
             ('va a copiar nueva forma')
             Object.assign(movedTask, structuredClone(taskVersionClone));
+            
             console.log('copia')
             console.log('nueva tarea es');
             console.log(movedTask);

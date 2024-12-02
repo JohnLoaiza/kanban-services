@@ -95,11 +95,21 @@ router.put('/:kanbanId/:taskId', async (req, res) => {
     Object.assign(task, updatedTaskData);
 
     await kanban.save();
-
+    const notificationData = {
+      kanbanId: parseInt(kanbanId),
+      columnId: column.id,
+      adminTask: updatedTaskData,
+      message: 'Se ha insertado una nueva tarea',
+    };
     res.status(200).json({
       message: 'Tarea actualizada exitosamente',
-      task,
+      data: notificationData,
     });
+    
+    return {
+      eventName: 'updateAdminLead',
+      data: notificationData
+    }
   });
 });
 

@@ -32,17 +32,17 @@ router.get('/:kanbanId/:taskId', async (req, res) => {
 
 
 // Crear una nueva tarea
-router.post('/:kanbanId', async (req, res) => {
+router.post('/:kanbanId/:columnId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanId } = req.params;
+    const { kanbanId, columnId } = req.params;
     const task = req.body;
 
     const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
-
-    const columnToUpdate = kanban.columns[0];
+    const columnIndex = kanban.columns.findIndex((c) => c.id ===parseInt(columnId))
+    const columnToUpdate = kanban.columns[columnIndex];
     const newTask = columnToUpdate.adminTasks.create(task); // Crear la tarea como subdocumento
     columnToUpdate.adminTasks.push(newTask); // Añadir la tarea a la columna correspondiente
 
@@ -54,7 +54,7 @@ router.post('/:kanbanId', async (req, res) => {
     });
     const notificationData = {
       kanbanId: parseInt(kanbanId),
-      columnId: columnToUpdate._id,
+      columnId: columnToUpdate.id,
       adminTask: newTask,
       message: 'Se ha insertado una nueva tarea',
     };

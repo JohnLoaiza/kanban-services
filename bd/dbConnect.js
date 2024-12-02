@@ -5,7 +5,7 @@ const axios = require('axios');
 
 class DbConnect {
 
-    static db = 'mongodb://localhost/kanbanDB21' //  'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/chatsolutions?retryWrites=true&w=majority'
+    static db =   'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/chatsolutions?retryWrites=true&w=majority' // 'mongodb://localhost/kanbanDB21'
     static options = {
         useNewUrlParser: true,
         useUnifiedTopology: true,

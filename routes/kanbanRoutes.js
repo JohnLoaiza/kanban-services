@@ -85,8 +85,16 @@ router.put('/:id', async (req, res) => {
     if (!updatedKanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
-
+    const notificationData = {
+      kanbanId: parseInt(kanbanId),
+      kanban: updatedKanban,
+      message: 'Se ha actualizado el kanban ' + kanbanId,
+    };  
     res.status(200).json(updatedKanban);
+    return {
+      eventName: 'updateKanban',
+      data: notificationData
+    }
   });
 });
 

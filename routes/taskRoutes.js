@@ -141,10 +141,23 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
       return res.status(404).json({ message: 'Tarea no encontrada 2' });
     }
 
+  
+
     column.tasks.splice(taskIndex, 1);
     await kanban.save();
 
+    const notificationData = {
+      kanbanId: parseInt(kanbanId),
+      columnId: column.id,
+      taskId: taskId,
+      message: 'Se ha eliminado la tarea ' + taskId,
+    };
+
     res.status(200).json({ message: 'Tarea eliminada exitosamente' });
+    return {
+      eventName: 'deleteLead',
+      data: notificationData
+    }
   });
 });
 

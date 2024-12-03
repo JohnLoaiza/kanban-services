@@ -137,11 +137,31 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
     if (taskIndex === -1) {
       return res.status(404).json({ message: 'Tarea no encontrada 2' });
     }
+    const deleteTask = column.adminTasks[taskIndex]
 
-    column.adminTasks.splice(taskIndex, 1);
-    await kanban.save();
+    const leadFilter = column.tasks.filter((t) => t.baseId === deleteTask.id)
 
-    res.status(200).json({ message: 'Tarea eliminada exitosamente' });
+    if (leadFilter.length === 0) {
+      column.adminTasks.splice(taskIndex, 1);
+      await kanban.save();
+      const notificationData = {
+        kanbanId: parseInt(kanbanId),
+        columnId: column.id,
+        taskId: taskId,
+        message: 'Se ha eliminado la tarea ' + taskId,
+      };  
+      res.status(200).json({success: true, message: 'Tarea eliminada exitosamente' });
+      return {
+        eventName: 'deleteAdminLead',
+        data: notificationData
+      }
+    } else {
+      res.status(200).json({success: false, message: 'Esta tarea no puede ser borrada, esta siendo utilizada como base por uno o más leads' });
+
+    }
+
+    
+
   });
 });
 

@@ -34,7 +34,7 @@ const RequerimentSchema = new mongoose.Schema({
 const TagSchema = new mongoose.Schema({
   id: { type: Number, required: true },
   name: { type: String, required: false },
-  color: { type: String, required: false },
+  color: { type: String, required: false }
 }, {
   toJSON: {
     transform: (doc, ret) => {

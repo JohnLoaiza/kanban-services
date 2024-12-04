@@ -40,7 +40,7 @@ router.post('/:kanbanId', async (req, res) => {
    
     const { kanbanId } = req.params;
     const {baseId, data} = req.body;
-    const {tags} = data
+    const {tags = []} = data
 
     console.log('va a agregar tarea');
     console.log('body es ', req.body);

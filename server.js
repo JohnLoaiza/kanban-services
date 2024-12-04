@@ -6,6 +6,8 @@ const kanbanRoutes = require('./routes/kanbanRoutes');
 const adminTasksRoutes = require('./routes/adminTaskRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const requerimentsRoutes = require('./routes/requerimentsRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 
 const DbConnect = require('./bd/dbConnect');
 
@@ -23,6 +25,8 @@ app.use('/api/kanbans', kanbanRoutes);
 app.use('/api/adminTasks', adminTasksRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/requeriments', requerimentsRoutes);
+app.use('/api/users', userRoutes);
+
 
 
 app.listen(PORT, () => {

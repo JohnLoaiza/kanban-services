@@ -113,4 +113,22 @@ router.delete('/:id', async (req, res) => {
   });
 });
 
+router.get('/bases/:id', async (req, res) => {
+  DbConnect.bdProcess(res, async () => {
+    const { id } = req.params;
+
+    const kanban = await Kanban.findOne({ id: parseInt(id) });
+    if (!kanban) {
+      return res.status(404).json({ message: 'Kanban no encontrado' });
+    }
+    console.log('kanban es ');
+    console.log(kanban);
+
+
+    const list = kanban.columns[0].adminTasks.map((t) => {return {baseId: t.id, title: t.title, description: t.description}})
+
+    res.status(200).json({ success: true, baseList: list });
+  });
+});
+
 module.exports = router;

@@ -5,7 +5,7 @@ const axios = require('axios');
 
 class DbConnect {
 
-    static db = 'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/chatsolutions?retryWrites=true&w=majority' // 'mongodb://localhost/kanbanDB21'
+    static db = 'mongodb://localhost/kanbanDB22' // 'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/chatsolutions?retryWrites=true&w=majority' 
     static options = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -72,6 +72,8 @@ class DbConnect {
                 }
             }
         } catch (error) {
+            console.log(error);
+            await this.close()
             res.status(500).json({ success: false, message: 'No se pudo procesar la base de datos', info: error });
         }
     }

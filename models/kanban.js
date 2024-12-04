@@ -87,7 +87,7 @@ const RequerimentGroupSchame = new mongoose.Schema({
 const HistorySchema = new mongoose.Schema({ columnId: { type: Number, required: true, }, taskVersion: [mongoose.Schema.Types.Mixed] })
 
 // Task Schema
-const TaskSchema = new mongoose.Schema({
+const AdminTaskSchema = new mongoose.Schema({
   id: { type: Number, required: true, },
   baseId: { type: Number, required: true },
   title: { type: String, required: true },
@@ -123,12 +123,44 @@ const TaskSchema = new mongoose.Schema({
   },
 });
 
+// Task Schema
+const TaskSchema = new mongoose.Schema({
+  id: { type: Number, required: true, },
+  baseId: { type: Number, required: true },
+  tags: { type: [TagSchema], required: false },
+  priority: { type: String, required: false },
+  requeriments: { type: [RequerimentSchema], default: [] },
+  history: { type: [HistorySchema], default: [] },
+  initDate: { type: Number, required: false },
+  movements: { type: [mongoose.Schema.Types.Mixed], default: [] },
+  state: { type: String, required: false },
+}, {
+  toJSON: {
+    transform: (doc, ret) => {
+      const transformed = { id: ret.id };
+      delete ret._id;
+      delete ret.id;
+      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      return transformed;
+    }
+  },
+  toObject: {
+    transform: (doc, ret) => {
+      const transformed = { id: ret.id };
+      delete ret._id;
+      delete ret.id;
+      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      return transformed;
+    }
+  },
+});
+
 // Column Schema
 const ColumnSchema = new mongoose.Schema({
   id: { type: Number, required: true, },
   title: { type: String, required: true },
   tasks: { type: [TaskSchema], default: [] },
-  adminTasks: { type: [TaskSchema], default: [] },
+  adminTasks: { type: [AdminTaskSchema], default: [] },
   autoFinish: { type: Boolean, required: false },
   filters: {
     filter1: { type: String, required: false },

@@ -128,6 +128,7 @@ const TaskSchema = new mongoose.Schema({
   id: { type: Number, required: true, },
   baseId: { type: Number, required: true },
   tags: { type: [TagSchema], required: false },
+  info: { type: String, required: false },
   priority: { type: String, required: false },
   requeriments: { type: [RequerimentSchema], default: [] },
   history: { type: [HistorySchema], default: [] },

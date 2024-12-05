@@ -5,10 +5,10 @@ const RequerimentSchema = new mongoose.Schema({
   id: { type: Number, required: true },
   title: { type: String, required: false },
   desp: { type: String, required: false },
-  file: { type: String, required: false },
+  finalData: { type: String, required: false },
   finished: { type: Boolean, required: false },
   finishedDate: { type: Number, required: false },
-  mandatoryFile: { type: Boolean, required: false },
+  mandatory: { type: Boolean, required: false },
   tipologyId: { type: Number, required: false },
 }, {
   toJSON: {

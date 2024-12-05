@@ -5,7 +5,7 @@ const RequerimentSchema = new mongoose.Schema({
   id: { type: Number, required: true },
   title: { type: String, required: false },
   desp: { type: String, required: false },
-  finalData: { type: String, required: false },
+  finalData: { type: mongoose.Schema.Types.Mixed, required: false, default: '' },
   finished: { type: Boolean, required: false },
   finishedDate: { type: Number, required: false },
   mandatory: { type: Boolean, required: false },

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Kanban = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
+const RequerimentController = require('../controllers/requerimentController');
 
 // Obtener un requerimiento específico
 router.get('/:kanbanUid/:taskId/:requerimentId', async (req, res) => {
@@ -69,47 +70,34 @@ router.put('/:kanbanId/:taskId/:requerimentId', async (req, res) => {
     const { kanbanId, taskId, requerimentId } = req.params;
     const updatedData = req.body;
 
-    const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
-    if (!kanban) {
-      return res.status(404).json({ message: 'Kanban no encontrado' });
+    const updated = await RequerimentController.updateRequeriment(kanbanId, taskId, requerimentId, updatedData, res)
+   
+    if (updated.updated) {
+      res.status(200).json({
+        message: 'Requerimiento actualizado exitosamente',
+        requeriment: updated.requeriment,
+      });
+  
+      const notificationData = {
+        kanbanId: parseInt(kanbanId),
+        columnId: updated.columnId,
+        taskId: parseInt(taskId),
+        requeriment: updated.requeriment,
+        message: 'Se ha actualizado un requisito',
+      };
+  
+      return {
+        eventName: 'updateRequeriment',
+        data : notificationData
+      }
+    } else {
+      res.status(400).json({
+        message: 'No se pudo actualizar el requisito',
+        success: false
+      });
     }
 
-    const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.id === parseInt(taskId))
-    );
-    if (!column) {
-      return res.status(404).json({ message: 'Tarea no encontrada' });
-    }
-
-    const task = column.tasks.find((task) => task.id === parseInt(taskId));
-    const requeriment = task.requeriments.find(
-      (req) => req.id === parseInt(requerimentId)
-    );
-
-    if (!requeriment) {
-      return res.status(404).json({ message: 'Requerimiento no encontrado' });
-    }
-
-    Object.assign(requeriment, updatedData);
-    await kanban.save();
-
-    res.status(200).json({
-      message: 'Requerimiento actualizado exitosamente',
-      requeriment,
-    });
-
-    const notificationData = {
-      kanbanId: parseInt(kanbanId),
-      columnId: column.id,
-      taskId: parseInt(taskId),
-      requeriment: requeriment,
-      message: 'Se ha actualizado un requisito',
-    };
-
-    return {
-      eventName: 'updateRequeriment',
-      data : notificationData
-    }
+    
   });
 });
 

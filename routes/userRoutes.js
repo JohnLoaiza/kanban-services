@@ -9,7 +9,7 @@ router.get('/:userId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { userId } = req.params;
 
-    const user = await User.findOne({ id: parseInt(kanbanId) });
+    const user = await User.findOne({ id: parseInt(userId) });
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }

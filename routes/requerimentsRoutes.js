@@ -3,34 +3,20 @@ const router = express.Router();
 const Kanban = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 const RequerimentController = require('../controllers/requerimentController');
+const os = require('os');
+const axios = require('axios');
+
 
 // Obtener un requerimiento específico
 router.get('/:kanbanUid/:taskId/:requerimentId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanUid, taskId, requerimentId } = req.params;
 
-    const kanban = await Kanban.findOne({ id: parseInt(kanbanUid, 10) });
-    if (!kanban) {
-      return res.status(404).json({ message: 'Kanban no encontrado' });
-    }
+  const requeriment = await RequerimentController.findRequeriment(kanbanUid, taskId, requerimentId, res)
 
-    const column = kanban.columns.find((col) =>
-      col.tasks.some((task) => task.id === parseInt(taskId, 10))
-    );
-    if (!column) {
-      return res.status(404).json({ message: 'Tarea no encontrada' });
-    }
-
-    const task = column.tasks.find((task) => task.id === parseInt(taskId, 10));
-    const requeriment = task.requeriments.find(
-      (req) => req.id === parseInt(requerimentId, 10)
-    );
-
-    if (!requeriment) {
-      return res.status(404).json({ message: 'Requerimiento no encontrado' });
-    }
-
-    res.status(200).json({ success: true, requeriment });
+  if(!requeriment) return;
+   res.status(200).json({ success: true, requeriment });
+   return;
   });
 });
 
@@ -131,6 +117,49 @@ router.delete('/:kanbanId/:taskId/:requerimentId', async (req, res) => {
     await kanban.save();
 
     res.status(200).json({ message: 'Requerimiento eliminado exitosamente' });
+  });
+});
+
+
+router.get('/solve/:kanbanId/:taskId/:requerimentId', async (req, res) => {
+  DbConnect.bdProcess(res, async () => {
+    const { kanbanId, taskId, requerimentId } = req.params;
+    const requeriment = await RequerimentController.findRequeriment(kanbanId, taskId, requerimentId, res)
+
+    if (!requeriment) return;
+
+    if (requeriment.finalData != '') {
+      res.status(201).json({
+        success: false,
+        message: 'Este requisito ya ha sido resuelto',
+        requeriment: requeriment,
+      });
+      return;
+    }
+
+    const fullDomain = `${req.protocol}://${req.headers.host}`;
+    console.log('full domain: ' + fullDomain);
+    
+    
+    const response = await axios.post('https://pay.oportuna.red/encodeQR', {
+      "userEmail": "kevincastrillon31@gmail.com",
+      "type": "widget",
+      "lifeTime": 600,
+      "webhook": fullDomain + '/api/webhook/',
+      "widgetId": requeriment.tipologyId,
+      "marketPlace" : {
+        "kanbanId": kanbanId,
+        "taskId": taskId,
+        "requerimentId": requerimentId
+      }
+    })
+    var data = response.data;
+    
+    res.status(201).json({
+      success: true,
+      message: 'Ruta encontrada',
+      ulr: 'https://oportunawidgets.web.app/widget/'+ data.encodeQR,
+    });
   });
 });
 

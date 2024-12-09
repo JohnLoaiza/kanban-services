@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const kanbanRoutes = require('./routes/kanbanRoutes');
@@ -10,7 +9,6 @@ const userRoutes = require('./routes/userRoutes');
 const webhook = require('./routes/webhook');
 
 
-const DbConnect = require('./bd/dbConnect');
 
 
 const app = express();

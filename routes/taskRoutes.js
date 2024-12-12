@@ -40,7 +40,7 @@ router.post('/:kanbanId', async (req, res) => {
    
     const { kanbanId } = req.params;
     const {baseId, data} = req.body;
-    const {tags = [], info = ''} = data
+    const {tags = [], info = '', schedule} = data
 
     console.log('va a agregar tarea');
     console.log('body es ', req.body);
@@ -61,6 +61,9 @@ router.post('/:kanbanId', async (req, res) => {
     newTask.baseId = baseTask.id
     newTask.tags = tags
     newTask.info = info
+
+    schedule ? newTask.schedule = schedule : () => {}
+    
     const newTaskCreate = columnToUpdate.tasks.create(newTask); // Crear la tarea como subdocumento
     columnToUpdate.tasks.push(newTaskCreate); // Añadir la tarea a la columna correspondiente
 

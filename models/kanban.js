@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { generateRandomNumber } = require('../controllers/tools');
 
 // Requeriment Schema
 const RequerimentSchema = new mongoose.Schema({
@@ -132,7 +133,11 @@ const TaskSchema = new mongoose.Schema({
   priority: { type: String, required: false },
   requeriments: { type: [RequerimentSchema], default: [] },
   history: { type: [HistorySchema], default: [] },
-  initDate: { type: Number, required: false },
+  initDate: { type: Number, required: false,  },
+  schedule : { type: mongoose.Schema.Types.Mixed, default: {startDate: { startDay: generateRandomNumber(0, 24), startMonth: 12, startYear: 2024 }, dailySchedule: {
+    start: generateRandomNumber(0, 24),
+    end: generateRandomNumber(0, 24),
+  }, duration: generateRandomNumber(0, 11)} },
   movements: { type: [mongoose.Schema.Types.Mixed], default: [] },
   state: { type: String, required: false },
 }, {

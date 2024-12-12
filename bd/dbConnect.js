@@ -5,7 +5,11 @@ const axios = require('axios');
 
 class DbConnect {
 
+<<<<<<< Updated upstream
     static db = 'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/chatsolutions?retryWrites=true&w=majority' //  'mongodb://localhost/kanbanDB26' 
+=======
+    static db =  'mongodb+srv://julian8312:abcd1234@cluster0.vfhqqjt.mongodb.net/chatsolutions?retryWrites=true&w=majority'
+>>>>>>> Stashed changes
     static options = {
         useNewUrlParser: true,
         useUnifiedTopology: true,

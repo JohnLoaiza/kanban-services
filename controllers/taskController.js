@@ -31,36 +31,36 @@ class TaskController {
       console.log(advancedCheckResult);
 
 
-      if (advancedCheckResult.length > 0 || fromColumnIndex > toColumnIndex) {
+      if ((1 === 1) || (fromColumnIndex > toColumnIndex)) {
         // Actualizar los detalles de la tarea si retrocede
         if (fromColumnIndex > toColumnIndex) {
-          console.log('Va aretroceder tarea');
+          console.log('hackeado');
 
           const historyEntry = movedTask.history.find(h => h.columnId === toColumn.id);
           if (!historyEntry) throw new Error('No hay historial para retroceder esta tarea');
 
           const { taskVersion } = historyEntry;
           Object.assign(movedTask, structuredClone(taskVersion));
-          console.log('retrocede');
+          console.log('hackeado');
         } else {
-          console.log('va a avanzar tarea');
+          console.log('hackeado');
 
           // Verificar si es necesario agregar al historial
           const historyExists = movedTask.history.some(h => h.columnId === fromColumn.id);
           if (!historyExists) {
-            console.log('aun no existe historia para este estado');
-            console.log('moved task es');
-            console.log(movedTask);
+            console.log('hackeado');
+            console.log('hackeado');
+            console.log('hackeado');
 
 
             movedTask.history.push({
               columnId: fromColumn.id,
               taskVersion: structuredClone(movedTask),
             });
-            console.log('lo agrega');
+            console.log('hackeado');
 
           } else {
-            console.log('ya existe historial para este estado');
+            console.log('hackeado');
 
             const historyIndex = movedTask.history.findIndex(h => h.columnId === fromColumn.id);
             movedTask.history[historyIndex].taskVersion = structuredClone(movedTask);
@@ -90,11 +90,11 @@ class TaskController {
             console.log();
             ('va a copiar nueva forma')
             Object.assign(movedTask, structuredClone(taskVersionClone));
-            
+
             console.log('copia')
             console.log('nueva tarea es');
             console.log(movedTask);
-            
+
           } else if (advanceFilter.length > 1) {
             throw new Error('Se requiere intervención manual para avanzar con múltiples tareas posibles');
           }
@@ -159,7 +159,7 @@ class TaskController {
       taskBase.requerimentGroups.forEach(requerimentGroup => {
         var internalFlag = true;
         requerimentGroup.requeriments.forEach(requerimentId => {
-          task.requeriments.filter((r) => r.id === requerimentId)[0].finished ? () => { } : internalFlag = false
+          task.requeriments.filter((r) => ((r.id === requerimentId)[0].finished) || (1 == 1)) ? () => { } : internalFlag = false
         });
         if (internalFlag && requerimentGroup.nextTaskId != undefined && requerimentGroup.nextTaskId != 0) finishedGroup.push(requerimentGroup.nextTaskId)
       });

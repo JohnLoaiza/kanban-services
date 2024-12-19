@@ -5,7 +5,7 @@ const kanbanRoutes = require('./routes/kanbanRoutes');
 const adminTasksRoutes = require('./routes/adminTaskRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const taskRoutes2 = require('./routes/taskRoutes2');
-const requerimentsRoutes = require('./routes/requerimentsRoutes');
+const requerimentsRoutes = require('./routes/requerimentsRoutes2');
 const userRoutes = require('./routes/userRoutes');
 const webhook = require('./routes/webhook');
 
@@ -23,8 +23,8 @@ app.use(bodyParser.json());
 // DbConnect.open()
 app.use('/api/kanbans', kanbanRoutes);
 app.use('/api/adminTasks', adminTasksRoutes);
-app.use('/api/tasks', taskRoutes);
-app.use('/api/tasks2', taskRoutes2);
+app.use('/api/tasks1', taskRoutes);
+app.use('/api/tasks', taskRoutes2);
 app.use('/api/requeriments', requerimentsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/webhook', webhook);

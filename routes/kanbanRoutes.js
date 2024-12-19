@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {Kanban} = require('../models/kanban');
+const {Kanban, Task} = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 
 // Crear un nuevo Kanban
@@ -51,9 +51,21 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const kanbans = await Kanban.find();
+
+    for (const kanban of kanbans) {
+      for (const column of kanban.columns) {
+        const tasks = await Task.find({
+          kanbanId: parseInt(kanban.id),
+          columnId: parseInt(column.id),
+        });
+        column.tasks = tasks; // Agregar las tareas a la columna
+      }
+    }
+
     res.status(200).json(kanbans);
   });
 });
+
 
 // Obtener un Kanban por ID
 router.get('/:id', async (req, res) => {
@@ -62,6 +74,13 @@ router.get('/:id', async (req, res) => {
 
     // Buscar por id en lugar de _id
     const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
+    for (const column of kanban.columns) {
+      const tasks = await Task.find({
+        kanbanId: parseInt(kanban.id),
+        columnId: parseInt(column.id),
+      });
+      column.tasks = tasks; // Agregar las tareas a la columna
+    }
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }

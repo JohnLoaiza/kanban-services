@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
       const requerimentId = data.mainData.requerimentId
       const newData = updateData(data.tipologyId, data.data)
 
-      const updated = await RequerimentController.updateRequeriment(kanbanId, taskId, requerimentId, {...newData, finished: true}, res)
+      const updated = await RequerimentController.updateRequeriment(taskId, requerimentId, {...newData, finished: true}, res)
    
     if (updated.updated) {
       res.status(200).json({

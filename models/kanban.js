@@ -127,6 +127,8 @@ const AdminTaskSchema = new mongoose.Schema({
 // Task Schema
 const TaskSchema = new mongoose.Schema({
   id: { type: Number, required: true, },
+  kanbanId: { type: Number, required: false, },
+  columnId: { type: Number, required: false, }, // state
   baseId: { type: Number, required: true },
   tags: { type: [TagSchema], required: false },
   info: { type: String, required: false },
@@ -223,6 +225,8 @@ const KanbanSchema = new mongoose.Schema({
   },
 });
 
+const Task = mongoose.model('Task', TaskSchema);
+
 const Kanban = mongoose.model('Kanban', KanbanSchema);
 
-module.exports = Kanban;
+module.exports = { Task, Kanban };

@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Kanban = require('../models/kanban');
+const {Kanban, Task} = require('../models/kanban');
 const mongoose = require('mongoose');
 const DbConnect = require('../bd/dbConnect');
 const TaskController = require('../controllers/taskController');
 const { ObjectId } = mongoose.Types;
+
+
 
 
 // Obtener una tarea específica

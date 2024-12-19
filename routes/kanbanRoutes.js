@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Kanban = require('../models/kanban');
+const {Kanban} = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 
 // Crear un nuevo Kanban

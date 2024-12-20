@@ -157,19 +157,18 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
 });
 
 // Avanzar en estado una tarea específica
-router.post('/:kanbanId/:taskId/advance', async (req, res) => {
+router.post('/advance/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
-    const { kanbanId, taskId } = req.params;
+    const {  taskId } = req.params;
 
     const movedTask = await TaskController.taskAdvance(
-      parseInt(kanbanId),
       parseInt(taskId)
     );
 
     if (!movedTask) {
       return res.status(404).json({ message: 'No se pudo avanzar la tarea' });
     }
-
+const kanbanId = movedTask.task.kanbanId;
     res.status(200).json({
       message: 'Tarea avanzada exitosamente',
       task: movedTask.task,

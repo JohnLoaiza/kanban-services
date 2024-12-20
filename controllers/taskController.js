@@ -1,23 +1,30 @@
-const Kanban = require('../models/kanban');
+const { Kanban, Task } = require('../models/kanban');
 
 
 
 class TaskController {
-  static taskAdvance = async (kanbanId, taskId) => {
+  static taskAdvance = async (taskId) => {
     try {
-      const kanbanDB = await Kanban.findOne({ id: parseInt(kanbanId) })
+      const movedTaskDB = await Task.findOne({ id: taskId })
+      const kanbanDB = await Kanban.findOne({ id: parseInt(movedTaskDB.kanbanId) })
+      console.log('movedTask', movedTaskDB);
+      console.log('kanbanDB', kanbanDB);
+
+      
       // Obtener el Kanban completo
       const kanban = kanbanDB.toObject();
       if (!kanban) throw new Error('Kanban no encontrado');
 
       // Buscar la columna actual y la tarea
-      const fromColumnIndex = kanban.columns.findIndex(col => col.tasks.some(task => task.id === taskId));
+      const fromColumnIndex = kanban.columns.findIndex(col => col.id === movedTaskDB.columnId);
+      console.log('fromcolumn Index', fromColumnIndex, kanban.columns);
+      
       if (fromColumnIndex === -1) throw new Error('Tarea no encontrada en ninguna columna');
 
       const fromColumn = kanban.columns[fromColumnIndex];
-      const movedTaskIndex = fromColumn.tasks.findIndex(task => task.id === taskId);
-      const movedTask = fromColumn.tasks[movedTaskIndex];
+      // const movedTaskIndex = fromColumn.tasks.findIndex(task => task.id === taskId);
 
+      const movedTask = movedTaskDB.toObject();
 
 
       // Determinar la columna de destino
@@ -90,11 +97,11 @@ class TaskController {
             console.log();
             ('va a copiar nueva forma')
             Object.assign(movedTask, structuredClone(taskVersionClone));
-            
+
             console.log('copia')
             console.log('nueva tarea es');
             console.log(movedTask);
-            
+
           } else if (advanceFilter.length > 1) {
             throw new Error('Se requiere intervención manual para avanzar con múltiples tareas posibles');
           }
@@ -104,9 +111,13 @@ class TaskController {
       }
 
       // Mover la tarea entre columnas
-      fromColumn.tasks.splice(movedTaskIndex, 1);
-      toColumn.tasks.push(movedTask);
+      // fromColumn.tasks.splice(movedTaskIndex, 1);
+      // toColumn.tasks.push(movedTask);
 
+      // Buscar y eliminar la tarea directamente por columnId
+      movedTask.columnId = toColumn.id
+      Object.assign(movedTaskDB, movedTask);
+      await movedTaskDB.save();
       // Agregar movimiento a la tarea
       movedTask.movements.push({
         user: 'API_USER',
@@ -115,7 +126,7 @@ class TaskController {
 
       // Guardar los cambios
       const updatedKanban = await Kanban.findOneAndUpdate(
-        { id: parseInt(kanbanId) },
+        { id: parseInt(kanban.id) },
         kanban,
         { new: true }
       );

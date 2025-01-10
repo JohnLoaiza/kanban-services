@@ -1,9 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const { Task } = require('../models/kanban');
+const { Task, generateId } = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 const RequerimentController = require('../controllers/requerimentController');
 const axios = require('axios');
+const AdminTaskController = require('../controllers/adminTaskController');
+
+
+// Crear un nuevo requerimiento para tarea admin
+router.post('/:kanbanId/:taskId', async (req, res) => {
+  DbConnect.bdProcess(res, async () => {
+    const { taskId, kanbanId } = req.params;
+    const newRequeriment = req.body;
+    const task = await AdminTaskController.getAdminTask(kanbanId,taskId, res)
+    if (!task) {
+      return res.status(404).json({ message: 'Tarea no encontrada' });
+    }
+    newRequeriment.id = generateId()
+    task.requeriments.push(newRequeriment)
+    const update = await AdminTaskController.findAndAsign(kanbanId, taskId, task.toObject(), res);
+    if (!update.success) {
+      return res.status(404).json({ message: 'Tarea no encontrada' });
+    }
+    await task.save();
+    res.status(201).json({
+      message: 'Requerimiento creado exitosamente',
+      newRequeriment,
+    });
+  });
+});
+
 
 // Obtener un requerimiento específico
 router.get('/:taskId/:requerimentId', async (req, res) => {

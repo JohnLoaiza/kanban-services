@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 const { generateRandomNumber } = require('../controllers/tools');
 
+// Función para generar un ID único automático
+const generateId = () => Math.floor(Math.random() * 1000000);
+
 // Requeriment Schema
 const RequerimentSchema = new mongoose.Schema({
-  id: { type: Number, required: true },
+  id: { type: Number, default: generateId },
   title: { type: String, required: false },
   desp: { type: String, required: false },
   finalData: { type: mongoose.Schema.Types.Mixed, required: false, default: '' },
@@ -17,7 +20,7 @@ const RequerimentSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -26,14 +29,14 @@ const RequerimentSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
 });
 
 const TagSchema = new mongoose.Schema({
-  id: { type: Number, required: true },
+  id: { type: Number, default: generateId },
   name: { type: String, required: false },
   color: { type: String, required: false }
 }, {
@@ -42,7 +45,7 @@ const TagSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -51,14 +54,14 @@ const TagSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
 });
 
 const RequerimentGroupSchame = new mongoose.Schema({
-  id: { type: Number, required: true, },
+  id: { type: Number, default: generateId },
   nextTaskId: { type: Number, required: false },
   active: { type: Boolean, required: false },
   title: { type: String, required: false },
@@ -69,7 +72,7 @@ const RequerimentGroupSchame = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -78,18 +81,21 @@ const RequerimentGroupSchame = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
 });
 
 // History Schema
-const HistorySchema = new mongoose.Schema({ columnId: { type: Number, required: true, }, taskVersion: [mongoose.Schema.Types.Mixed] })
+const HistorySchema = new mongoose.Schema({
+  columnId: { type: Number, required: true },
+  taskVersion: [mongoose.Schema.Types.Mixed]
+});
 
-// Task Schema
+// AdminTask Schema
 const AdminTaskSchema = new mongoose.Schema({
-  id: { type: Number, required: true, },
+  id: { type: Number, default: generateId },
   baseId: { type: Number, required: true },
   title: { type: String, required: true },
   description: { type: String, required: false },
@@ -109,7 +115,7 @@ const AdminTaskSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -118,7 +124,7 @@ const AdminTaskSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -126,20 +132,31 @@ const AdminTaskSchema = new mongoose.Schema({
 
 // Task Schema
 const TaskSchema = new mongoose.Schema({
-  id: { type: Number, required: true, },
-  kanbanId: { type: Number, required: false, },
-  columnId: { type: Number, required: false, }, // state
+  id: { type: Number, default: generateId },
+  kanbanId: { type: Number, required: false },
+  columnId: { type: Number, required: false },
   baseId: { type: Number, required: true },
   tags: { type: [TagSchema], required: false },
   info: { type: String, required: false },
   priority: { type: String, required: false },
   requeriments: { type: [RequerimentSchema], default: [] },
   history: { type: [HistorySchema], default: [] },
-  initDate: { type: Number, required: false,  },
-  schedule : { type: mongoose.Schema.Types.Mixed, default: {startDate: { startDay: generateRandomNumber(0, 24), startMonth: 12, startYear: 2024 }, dailySchedule: {
-    start: generateRandomNumber(0, 24),
-    end: generateRandomNumber(0, 24),
-  }, duration: generateRandomNumber(0, 11)} },
+  initDate: { type: Number, required: false },
+  schedule: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {
+      startDate: {
+        startDay: generateRandomNumber(0, 24),
+        startMonth: 12,
+        startYear: 2024
+      },
+      dailySchedule: {
+        start: generateRandomNumber(0, 24),
+        end: generateRandomNumber(0, 24)
+      },
+      duration: generateRandomNumber(0, 11)
+    }
+  },
   movements: { type: [mongoose.Schema.Types.Mixed], default: [] },
   state: { type: String, required: false },
 }, {
@@ -148,7 +165,7 @@ const TaskSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -157,7 +174,7 @@ const TaskSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -165,18 +182,28 @@ const TaskSchema = new mongoose.Schema({
 
 // Column Schema
 const ColumnSchema = new mongoose.Schema({
-  id: { type: Number, required: true, },
+  id: { type: Number, default: generateId },
   title: { type: String, required: true },
   tasks: { type: [TaskSchema], default: [] },
   adminTasks: { type: [AdminTaskSchema], default: [] },
   autoFinish: { type: Boolean, required: false },
   filters: {
-    filter1: { type: String, required: false },
-    filter2: { type: String, required: false },
-    filter3: { type: String, required: false },
-    filter4: { type: Boolean, required: false },
-    filter5: { type: Boolean, required: false },
-    filter6: { type: String, required: false },
+    type: {
+      filter1: { type: String, default: '' },
+      filter2: { type: String, default: '' },
+      filter3: { type: String, default: '' },
+      filter4: { type: Boolean, default: false },
+      filter5: { type: Boolean, default: false },
+      filter6: { type: String, default: '' },
+    },
+    default: {
+      filter1: '',
+      filter2: '',
+      filter3: '',
+      filter4: false,
+      filter5: false,
+      filter6: '',
+    },
   },
 }, {
   toJSON: {
@@ -184,7 +211,7 @@ const ColumnSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -193,7 +220,7 @@ const ColumnSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -201,7 +228,7 @@ const ColumnSchema = new mongoose.Schema({
 
 // Kanban Schema
 const KanbanSchema = new mongoose.Schema({
-  id: { type: Number, required: true },
+  id: { type: Number, default: generateId },
   nombre: { type: String, required: true },
   columns: { type: [ColumnSchema], default: [] },
 }, {
@@ -210,7 +237,7 @@ const KanbanSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
@@ -219,14 +246,13 @@ const KanbanSchema = new mongoose.Schema({
       const transformed = { id: ret.id };
       delete ret._id;
       delete ret.id;
-      Object.assign(transformed, ret);  // Merge the rest of the properties after 'id'
+      Object.assign(transformed, ret);
       return transformed;
     }
   },
 });
 
 const Task = mongoose.model('Task', TaskSchema);
-
 const Kanban = mongoose.model('Kanban', KanbanSchema);
 
-module.exports = { Task, Kanban };
+module.exports = { Task, Kanban, generateId };

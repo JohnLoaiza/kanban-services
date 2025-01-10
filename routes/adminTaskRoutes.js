@@ -1,37 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const Kanban = require('../models/kanban');
+const {Kanban} = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
+const AdminTaskController = require('../controllers/adminTaskController');
 
 
-// Obtener una tarea específica
+// Obtener una tarea admin específica
 router.get('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId, taskId } = req.params;
 
-    const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
-    if (!kanban) {
-      return res.status(404).json({ message: 'Kanban no encontrado' });
-    }
-    console.log('kanban es ');
-    console.log(kanban);
-
-
-    const column = kanban.columns.find((col) =>
-      col.adminTasks.some((adminTask) => adminTask.id === parseInt(taskId))
-    );
-
-    if (!column) {
-      return res.status(404).json({ message: 'Tarea no encontrada' });
-    }
-
-    const task = column.adminTasks.find((adminTask) => adminTask.id === parseInt(taskId));
+   const task = await AdminTaskController.getAdminTask(kanbanId,taskId, res)
     res.status(200).json({ success: true, task });
   });
 });
 
 
-// Crear una nueva tarea
+// Crear una nueva tarea admin
 router.post('/:kanbanId/:columnId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId, columnId } = req.params;
@@ -65,36 +50,15 @@ router.post('/:kanbanId/:columnId', async (req, res) => {
   });
 });
 
-// Actualizar una tarea específica
+// Actualizar una tarea admin específica
 router.put('/:kanbanId/:taskId', async (req, res) => {
   console.log('entra a actualizar');
   
   DbConnect.bdProcess(res, async () => {
     const { kanbanId, taskId } = req.params;
     const updatedTaskData = req.body;
-
-    const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
-    if (!kanban) {
-      return res.status(404).json({ message: 'Kanban no encontrado' });
-    }
-
-    const column = kanban.columns.find((col) =>
-      col.adminTasks.some((adminTask) => adminTask.id === parseInt(taskId))
-    );
-
-    if (!column) {
-      return res.status(404).json({ message: 'Tarea no encontrada' });
-    }
-
-    const task = column.adminTasks.find((adminTask) => adminTask.id === parseInt(taskId));
-    if (!task) {
-      return res.status(404).json({ message: 'Tarea no encontrada' });
-    }
-
-    // Actualizar solo las propiedades especificadas
-    Object.assign(task, updatedTaskData);
-
-    await kanban.save();
+    const update = await AdminTaskController.findAndAsign(kanbanId, taskId, updatedTaskData, res);
+    const column = update.column;
     const notificationData = {
       kanbanId: parseInt(kanbanId),
       columnId: column.id,
@@ -115,7 +79,7 @@ router.put('/:kanbanId/:taskId', async (req, res) => {
 
 
 
-// Eliminar una tarea específica
+// Eliminar una tarea admin específica
 router.delete('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId, taskId } = req.params;

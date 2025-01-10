@@ -22,7 +22,6 @@ app.use(bodyParser.json());
 // DbConnect.open()
 app.use('/api/kanbans', kanbanRoutes);
 app.use('/api/adminTasks', adminTasksRoutes);
-app.use('/api/tasks1', taskRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/requeriments', requerimentsRoutes);
 app.use('/api/users', userRoutes);

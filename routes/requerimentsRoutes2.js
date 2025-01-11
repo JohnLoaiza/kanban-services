@@ -36,8 +36,8 @@ router.get('/:taskId/:requerimentId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { taskId, requerimentId } = req.params;
 
-    const requeriment = await RequerimentController.findRequeriment(taskId, requerimentId, res);
-
+    const find = await RequerimentController.findRequeriment(taskId, requerimentId, res);
+    const requeriment = find.requeriment;
     if (!requeriment) return;
 
     res.status(200).json({ success: true, requeriment });
@@ -128,8 +128,8 @@ router.get('/solve/:taskId/:requerimentId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { taskId, requerimentId } = req.params;
 
-    const requeriment = await RequerimentController.findRequeriment(taskId, requerimentId, res);
-
+    const find = await RequerimentController.findRequeriment(taskId, requerimentId, res);
+const requeriment = find.requeriment;
     if (!requeriment) return;
 
     if (requeriment.finalData !== '') {
@@ -150,8 +150,9 @@ router.get('/solve/:taskId/:requerimentId', async (req, res) => {
       webhook: `${fullDomain}/api/webhook/`,
       widgetId: requeriment.tipologyId,
       marketPlace: {
-        taskId,
-        requerimentId,
+        kanbanId: find.task.kanbanId,
+        taskId: taskId,
+        requerimentId: requerimentId,
       },
     });
 

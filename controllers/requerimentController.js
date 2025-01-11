@@ -48,7 +48,7 @@ class RequerimentController {
       }
   
       // Retornar el requerimiento encontrado
-      return requeriment
+      return {requeriment: requeriment, task: task}
     } catch (error) {
       console.error('Error al buscar el requerimiento:', error);
       return res.status(500).json({ message: 'Error interno del servidor' });

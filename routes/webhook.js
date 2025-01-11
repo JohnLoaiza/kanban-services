@@ -61,7 +61,9 @@ router.post('/', async (req, res) => {
            }
     
         default:
-            break;
+          return {
+            finalData: data
+           }
     }
   }
 

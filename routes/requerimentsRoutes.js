@@ -1,10 +1,11 @@
-const express = require('express');
+import express from 'express';
+import Kanban from '../models/kanban.js';
+import DbConnect from '../bd/dbConnect.js';
+import * as RequerimentController from '../controllers/requerimentController.js';
+import os from 'os';
+import axios from 'axios';
+
 const router = express.Router();
-const Kanban = require('../models/kanban');
-const DbConnect = require('../bd/dbConnect');
-const RequerimentController = require('../controllers/requerimentController');
-const os = require('os');
-const axios = require('axios');
 
 
 // Obtener un requerimiento específico

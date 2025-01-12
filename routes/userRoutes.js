@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import DbConnect from '../bd/dbConnect.js';
+import User from '../models/user.js';
+
 const router = express.Router();
-const DbConnect = require('../bd/dbConnect');
-const User = require('../models/user');
 
 
 // Obtener una tarea específica

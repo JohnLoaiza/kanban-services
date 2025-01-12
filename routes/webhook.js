@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import DbConnect from '../bd/dbConnect.js';
+import * as RequerimentController from '../controllers/requerimentController.js';
+
 const router = express.Router();
-const DbConnect = require('../bd/dbConnect');
-const RequerimentController = require('../controllers/requerimentController');
 
 
 router.post('/', async (req, res) => {

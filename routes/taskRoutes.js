@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { Kanban, Task } from '../models/kanban.js';
+import DbConnect from '../bd/dbConnect.js';
+import * as TaskController from '../controllers/taskController.js';
+
 const router = express.Router();
-const { Kanban, Task } = require('../models/kanban');
-const DbConnect = require('../bd/dbConnect');
-const TaskController = require('../controllers/taskController');
 
 
 

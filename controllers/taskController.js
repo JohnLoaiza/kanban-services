@@ -1,4 +1,4 @@
-const { Kanban, Task } = require('../models/kanban');
+import { Kanban, Task } from '../models/kanban.js';
 
 
 

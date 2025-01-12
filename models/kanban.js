@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const { generateRandomNumber } = require('../controllers/tools');
+import mongoose from 'mongoose';
+import { generateRandomNumber } from '../controllers/tools.js';
+
 
 // Función para generar un ID único automático
 const generateId = () => Math.floor(Math.random() * 1000000);

@@ -1,12 +1,12 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const kanbanRoutes = require('./routes/kanbanRoutes');
-const adminTasksRoutes = require('./routes/adminTaskRoutes');
-const taskRoutes = require('./routes/taskRoutes');
-const requerimentsRoutes = require('./routes/requerimentsRoutes2');
-const userRoutes = require('./routes/userRoutes');
-const webhook = require('./routes/webhook');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import kanbanRoutes from './routes/kanbanRoutes.js';
+import adminTasksRoutes from './routes/adminTaskRoutes.js';
+import taskRoutes from './routes/taskRoutes.js';
+import requerimentsRoutes from './routes/requerimentsRoutes2.js';
+import userRoutes from './routes/userRoutes.js';
+import webhook from './routes/webhook.js';
 
 
 

@@ -1,7 +1,12 @@
-const express = require('express');
+import express from 'express';
+import { Kanban, Task } from '../models/kanban.js';
+import DbConnect from '../bd/dbConnect.js';
+
 const router = express.Router();
-const {Kanban, Task} = require('../models/kanban');
-const DbConnect = require('../bd/dbConnect');
+
+// Aquí puedes agregar tus rutas usando `router`
+
+export default router;
 
 // Crear un nuevo Kanban
 router.post('/', async (req, res) => {

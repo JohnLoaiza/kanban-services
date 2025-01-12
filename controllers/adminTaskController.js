@@ -1,4 +1,4 @@
-const {Kanban} = require('../models/kanban');
+import { Kanban } from '../models/kanban.js';
 
 
 

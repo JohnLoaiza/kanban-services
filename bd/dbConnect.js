@@ -1,6 +1,7 @@
 
-const mongoose = require('mongoose');
-const axios = require('axios');
+import mongoose from 'mongoose';
+import axios from 'axios';
+
 
 
 class DbConnect {

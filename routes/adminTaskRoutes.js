@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { Kanban } from '../models/kanban.js';
+import DbConnect from '../bd/dbConnect.js';
+import * as AdminTaskController from '../controllers/adminTaskController.js';
+
 const router = express.Router();
-const {Kanban} = require('../models/kanban');
-const DbConnect = require('../bd/dbConnect');
-const AdminTaskController = require('../controllers/adminTaskController');
 
 
 // Obtener una tarea admin específica

@@ -1,10 +1,12 @@
-const express = require('express');
+import express from 'express';
+import { Task, generateId } from '../models/kanban.js';
+import DbConnect from '../bd/dbConnect.js';
+import * as RequerimentController from '../controllers/requerimentController.js';
+import axios from 'axios';
+import * as AdminTaskController from '../controllers/adminTaskController.js';
+
 const router = express.Router();
-const { Task, generateId } = require('../models/kanban');
-const DbConnect = require('../bd/dbConnect');
-const RequerimentController = require('../controllers/requerimentController');
-const axios = require('axios');
-const AdminTaskController = require('../controllers/adminTaskController');
+
 
 
 // Crear un nuevo requerimiento para tarea admin

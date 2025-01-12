@@ -54,4 +54,4 @@ class AdminTaskController {
     }
 }
 
-module.exports = AdminTaskController;
+export default AdminTaskController;

@@ -168,4 +168,4 @@ const requeriment = find.requeriment;
   });
 });
 
-module.exports = router;
+export default router;

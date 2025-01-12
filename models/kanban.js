@@ -3,7 +3,7 @@ import { generateRandomNumber } from '../controllers/tools.js';
 
 
 // Función para generar un ID único automático
-const generateId = () => Math.floor(Math.random() * 1000000);
+export const generateId = () => Math.floor(Math.random() * 1000000);
 
 // Requeriment Schema
 const RequerimentSchema = new mongoose.Schema({
@@ -253,7 +253,7 @@ const KanbanSchema = new mongoose.Schema({
   },
 });
 
-const Task = mongoose.model('Task', TaskSchema);
-const Kanban = mongoose.model('Kanban', KanbanSchema);
+export const Task = mongoose.model('Task', TaskSchema);
+export const Kanban = mongoose.model('Kanban', KanbanSchema);
 
-module.exports = { Task, Kanban, generateId };
+export default { Task, Kanban, generateId };

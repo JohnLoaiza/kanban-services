@@ -6,7 +6,6 @@ const router = express.Router();
 
 // Aquí puedes agregar tus rutas usando `router`
 
-export default router;
 
 // Crear un nuevo Kanban
 router.post('/', async (req, res) => {
@@ -155,4 +154,4 @@ router.get('/bases/:id', async (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

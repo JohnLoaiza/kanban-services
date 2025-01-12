@@ -191,4 +191,4 @@ const kanbanId = movedTask.task.kanbanId;
   });
 });
 
-module.exports = router;
+export default router;

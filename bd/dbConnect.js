@@ -80,4 +80,4 @@ class DbConnect {
     }
 }
 
-module.exports = DbConnect;
+export default DbConnect;

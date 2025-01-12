@@ -8,4 +8,4 @@ const User = mongoose.model('userTasks', {
     tareas: { type: [mongoose.Schema.Types.Mixed], default: [] },
 }, );
 
-module.exports = User;
+export default User;

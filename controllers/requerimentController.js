@@ -55,4 +55,4 @@ class RequerimentController {
   };
 }
 
-module.exports = RequerimentController;
+export default  RequerimentController;

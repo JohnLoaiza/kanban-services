@@ -1,9 +1,9 @@
 import express from 'express';
 import { Task, generateId } from '../models/kanban.js';
 import DbConnect from '../bd/dbConnect.js';
-import * as RequerimentController from '../controllers/requerimentController.js';
+import  RequerimentController from '../controllers/requerimentController.js';
 import axios from 'axios';
-import * as AdminTaskController from '../controllers/adminTaskController.js';
+import AdminTaskController from '../controllers/adminTaskController.js';
 
 const router = express.Router();
 

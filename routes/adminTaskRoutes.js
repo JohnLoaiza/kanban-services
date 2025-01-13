@@ -1,7 +1,7 @@
 import express from 'express';
 import { Kanban } from '../models/kanban.js';
 import DbConnect from '../bd/dbConnect.js';
-import * as AdminTaskController from '../controllers/adminTaskController.js';
+import  AdminTaskController from '../controllers/adminTaskController.js';
 
 const router = express.Router();
 

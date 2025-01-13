@@ -1,7 +1,7 @@
 import express from 'express';
 import Kanban from '../models/kanban.js';
 import DbConnect from '../bd/dbConnect.js';
-import * as RequerimentController from '../controllers/requerimentController.js';
+import  RequerimentController from '../controllers/requerimentController.js';
 import os from 'os';
 import axios from 'axios';
 

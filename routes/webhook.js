@@ -1,6 +1,6 @@
 import express from 'express';
 import DbConnect from '../bd/dbConnect.js';
-import * as RequerimentController from '../controllers/requerimentController.js';
+import  RequerimentController from '../controllers/requerimentController.js';
 
 const router = express.Router();
 

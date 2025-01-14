@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
       const kanbanId = data.mainData.kanbanId
       const taskId = data.mainData.taskId
       const requerimentId = data.mainData.requerimentId
-      const newData = updateData(data.tipologyId, data.data)
+      const newData = await updateData(data.tipologyId, data.data, taskId, requerimentId, res)
 
       const updated = await RequerimentController.updateRequeriment(taskId, requerimentId, {...newData, finished: true}, res)
    
@@ -47,7 +47,7 @@ router.post('/', async (req, res) => {
     });
   });
 
-  const updateData = (tipologyId, data) => {
+  const updateData = async (tipologyId, data, taskId, requerimentId, res) => {
     switch (tipologyId) {
         case 16:
             
@@ -59,6 +59,23 @@ router.post('/', async (req, res) => {
 
            return {
             finalData: data
+           }
+
+           case 35: 
+           console.log('se actualiza listado de archivos')
+         const findRq =  await RequerimentController.findRequeriment(taskId, requerimentId, res);
+         const req = findRq.requeriment;
+         console.log('req es ', req);
+         
+         if (Array.isArray(req.finalData)) {
+          req.finalData.push(data)
+        } else {
+          req.finalData = [data]
+        }
+       console.log('retorna', req.finalData);
+       
+           return {
+            finalData: req.finalData
            }
     
         default:

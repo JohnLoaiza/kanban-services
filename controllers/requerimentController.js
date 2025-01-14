@@ -15,6 +15,7 @@ class RequerimentController {
       (req) => req.id === parseInt(requerimentId)
     );
 
+    
     if (!requeriment) {
       return res.status(404).json({ message: 'Requerimiento no encontrado' });
     }

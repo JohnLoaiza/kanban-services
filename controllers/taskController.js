@@ -9,6 +9,8 @@ class TaskController {
       const kanbanDB = await Kanban.findOne({ id: parseInt(movedTaskDB.kanbanId) })
       console.log('movedTask', movedTaskDB);
       console.log('kanbanDB', kanbanDB);
+      console.log('last history', movedTaskDB.history[movedTaskDB.history.length - 1]);
+      
 
       
       // Obtener el Kanban completo
@@ -59,10 +61,12 @@ class TaskController {
             console.log('moved task es');
             console.log(movedTask);
 
-
+const clone = structuredClone(movedTask);
+console.log('clonada es:', clone);
+            clone.history = []
             movedTask.history.push({
               columnId: fromColumn.id,
-              taskVersion: structuredClone(movedTask),
+              taskVersion: clone,
             });
             console.log('lo agrega');
 
@@ -94,13 +98,18 @@ class TaskController {
             omitProperties.forEach(prop => {
               delete taskVersionClone[prop]; // Elimina la propiedad de la clonación
             });
-            console.log();
-            ('va a copiar nueva forma')
+            console.log('va a copiar nueva forma', movedTask);
+            console.log('history');
+            console.log(movedTask.history[movedTask.history.length - 1]);
+            
             Object.assign(movedTask, structuredClone(taskVersionClone));
 
             console.log('copia')
             console.log('nueva tarea es');
             console.log(movedTask);
+            console.log('history');
+            console.log(movedTask.history[movedTask.history.length - 1]);
+            
 
           } else if (advanceFilter.length > 1) {
             throw new Error('Se requiere intervención manual para avanzar con múltiples tareas posibles');
@@ -116,7 +125,16 @@ class TaskController {
 
       // Buscar y eliminar la tarea directamente por columnId
       movedTask.columnId = toColumn.id
+      console.log('Va a asignar a la bd');
+      console.log(movedTaskDB);
+      console.log('los siguientes parametros');
+      console.log(movedTask);
+      console.log('con historial');
+      console.log(movedTask.history);
+      
+      
       Object.assign(movedTaskDB, movedTask);
+      
       await movedTaskDB.save();
       // Agregar movimiento a la tarea
       movedTask.movements.push({

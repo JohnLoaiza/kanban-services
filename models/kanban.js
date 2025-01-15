@@ -92,8 +92,9 @@ const RequerimentGroupSchame = new mongoose.Schema({
 // History Schema
 const HistorySchema = new mongoose.Schema({
   columnId: { type: Number, required: true },
-  taskVersion: [mongoose.Schema.Types.Mixed]
-});
+  taskVersion: { type: mongoose.Schema.Types.Mixed, default: {} }
+  }
+);
 
 // AdminTask Schema
 const AdminTaskSchema = new mongoose.Schema({

@@ -1,6 +1,7 @@
 
-import mongoose from 'mongoose';
-import axios from 'axios';
+const mongoose = require('mongoose');
+const axios = require('axios');
+
 
 
 
@@ -80,4 +81,4 @@ class DbConnect {
     }
 }
 
-export default DbConnect;
+module.exports = DbConnect;

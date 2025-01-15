@@ -1,6 +1,7 @@
-import express from 'express';
-import { Kanban, Task } from '../models/kanban.js';
-import DbConnect from '../bd/dbConnect.js';
+const express = require('express');
+const { Kanban, Task } = require('../models/kanban');
+const DbConnect = require('../bd/dbConnect');
+
 
 const router = express.Router();
 
@@ -154,4 +155,4 @@ router.get('/bases/:id', async (req, res) => {
   });
 });
 
-export default router;
+module.exports = router;

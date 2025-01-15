@@ -1,6 +1,7 @@
-import express from 'express';
-import DbConnect from '../bd/dbConnect.js';
-import User from '../models/user.js';
+const express = require('express');
+const DbConnect = require('../bd/dbConnect');
+const User = require('../models/user');
+
 
 const router = express.Router();
 
@@ -31,4 +32,4 @@ router.get('/', async (req, res) => {
   
 
 
-  export default router;
+  module.exports = router;

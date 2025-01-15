@@ -1,7 +1,8 @@
-import express from 'express';
-import { Kanban } from '../models/kanban.js';
-import DbConnect from '../bd/dbConnect.js';
-import  AdminTaskController from '../controllers/adminTaskController.js';
+const express = require('express');
+const { Kanban } = require('../models/kanban');
+const DbConnect = require('../bd/dbConnect');
+const AdminTaskController = require('../controllers/adminTaskController');
+
 
 const router = express.Router();
 
@@ -136,4 +137,4 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
 
 
 
-export default router;
+module.exports = router;

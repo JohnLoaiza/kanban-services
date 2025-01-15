@@ -1,6 +1,6 @@
 
 
-const devTasks =   {
+export const devTasks =   {
     "id": 64,
     "nombre": "Tareas Devs",
     "columns": [

@@ -1,4 +1,5 @@
-import { Kanban, Task } from '../models/kanban.js';
+const { Kanban, Task } = require('../models/kanban');
+
 
 class RequerimentController {
 
@@ -56,4 +57,4 @@ class RequerimentController {
   };
 }
 
-export default  RequerimentController;
+module.exports =  RequerimentController;

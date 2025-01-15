@@ -1,9 +1,10 @@
-import express from 'express';
-import { Task, generateId } from '../models/kanban.js';
-import DbConnect from '../bd/dbConnect.js';
-import  RequerimentController from '../controllers/requerimentController.js';
-import axios from 'axios';
-import AdminTaskController from '../controllers/adminTaskController.js';
+const express = require('express');
+const { Task, generateId } = require('../models/kanban');
+const DbConnect = require('../bd/dbConnect');
+const RequerimentController = require('../controllers/requerimentController');
+const axios = require('axios');
+const AdminTaskController = require('../controllers/adminTaskController');
+
 
 const router = express.Router();
 
@@ -168,4 +169,4 @@ const requeriment = find.requeriment;
   });
 });
 
-export default router;
+module.exports = router;

@@ -1,4 +1,4 @@
-import { Kanban, Task } from '../models/kanban.js';
+const { Kanban, Task } = require('../models/kanban');
 
 
 
@@ -183,4 +183,4 @@ class TaskController {
 
 }
 
-export default TaskController;
+module.exports = TaskController;

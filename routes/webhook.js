@@ -1,6 +1,7 @@
-import express from 'express';
-import DbConnect from '../bd/dbConnect.js';
-import  RequerimentController from '../controllers/requerimentController.js';
+const express = require('express');
+const DbConnect = require('../bd/dbConnect');
+const RequerimentController = require('../controllers/requerimentController');
+
 
 const router = express.Router();
 
@@ -85,4 +86,4 @@ router.post('/', async (req, res) => {
     }
   }
 
-  export default router;
+  module.exports = router;

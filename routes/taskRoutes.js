@@ -1,7 +1,8 @@
-import express from 'express';
-import { Kanban, Task } from '../models/kanban.js';
-import DbConnect from '../bd/dbConnect.js';
-import  TaskController from '../controllers/taskController.js';
+const express = require('express');
+const { Kanban, Task } = require('../models/kanban');
+const DbConnect = require('../bd/dbConnect');
+const TaskController = require('../controllers/taskController');
+
 
 const router = express.Router();
 
@@ -191,4 +192,4 @@ const kanbanId = movedTask.task.kanbanId;
   });
 });
 
-export default router;
+module.exports = router;

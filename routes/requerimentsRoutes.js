@@ -1,9 +1,9 @@
-import express from 'express';
-import Kanban from '../models/kanban.js';
-import DbConnect from '../bd/dbConnect.js';
-import  RequerimentController from '../controllers/requerimentController.js';
-import os from 'os';
-import axios from 'axios';
+const express = require('express');
+const Kanban = require('../models/kanban');
+const DbConnect = require('../bd/dbConnect');
+const RequerimentController = require('../controllers/requerimentController');
+const axios = require('axios');
+
 
 const router = express.Router();
 
@@ -164,4 +164,4 @@ router.get('/solve/:kanbanId/:taskId/:requerimentId', async (req, res) => {
   });
 });
 
-export default router;
+module.exports = router;

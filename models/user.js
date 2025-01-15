@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 
 
@@ -8,4 +8,4 @@ const User = mongoose.model('userTasks', {
     tareas: { type: [mongoose.Schema.Types.Mixed], default: [] },
 }, );
 
-export default User;
+module.exports = User;

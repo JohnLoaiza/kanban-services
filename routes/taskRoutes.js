@@ -192,4 +192,40 @@ const kanbanId = movedTask.task.kanbanId;
   });
 });
 
+// Retroceder una tarea específica
+router.post('/back/:taskId', async (req, res) => {
+  DbConnect.bdProcess(res, async () => {
+    const {  taskId } = req.params;
+console.log('va a retroceder la tarea ' + taskId);
+
+    const movedTask = await TaskController.taskAdvance(
+      parseInt(taskId),
+      true
+    );
+
+    if (!movedTask) {
+      return res.status(404).json({ message: 'No se pudo retroceder la tarea' });
+    }
+const kanbanId = movedTask.task.kanbanId;
+    res.status(200).json({
+      message: 'Tarea retrocedida exitosamente',
+      task: movedTask.task,
+      fromColumnIndex: movedTask.fromColumnIndex,
+      toColumnIndex: movedTask.toColumnIndex,
+    });
+    const notificationData = {
+      kanbanId: parseInt(kanbanId),
+      task: movedTask.task,
+      fromColumnIndex: movedTask.fromColumnIndex,
+      toColumnIndex: movedTask.toColumnIndex,
+      message: 'Tarea retrocedida correctamente',
+    };
+
+    return {
+      eventName: 'taskAdvance',
+      data: notificationData
+    }
+  });
+});
+
 module.exports = router;

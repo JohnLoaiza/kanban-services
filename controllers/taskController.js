@@ -3,13 +3,13 @@ const { Kanban, Task } = require('../models/kanban');
 
 
 class TaskController {
-  static taskAdvance = async (taskId) => {
+  static taskAdvance = async (taskId, isBack = false) => {
     try {
       const movedTaskDB = await Task.findOne({ id: taskId })
       const kanbanDB = await Kanban.findOne({ id: parseInt(movedTaskDB.kanbanId) })
-      console.log('movedTask', movedTaskDB);
-      console.log('kanbanDB', kanbanDB);
-      console.log('last history', movedTaskDB.history[movedTaskDB.history.length - 1]);
+    //  console.log('movedTask', movedTaskDB);
+   //   console.log('kanbanDB', kanbanDB);
+   //   console.log('last history', movedTaskDB.history[movedTaskDB.history.length - 1]);
       
 
       
@@ -19,7 +19,7 @@ class TaskController {
 
       // Buscar la columna actual y la tarea
       const fromColumnIndex = kanban.columns.findIndex(col => col.id === movedTaskDB.columnId);
-      console.log('fromcolumn Index', fromColumnIndex, kanban.columns);
+    //  console.log('fromcolumn Index', fromColumnIndex, kanban.columns);
       
       if (fromColumnIndex === -1) throw new Error('Tarea no encontrada en ninguna columna');
 
@@ -30,14 +30,14 @@ class TaskController {
 
 
       // Determinar la columna de destino
-      const toColumnIndex = fromColumnIndex + 1;
+      const toColumnIndex =  fromColumnIndex + (isBack? -1 : 1);
       const toColumn = kanban.columns[toColumnIndex];
       if (!toColumn) throw new Error('No existe una columna siguiente');
 
       // Validaciones avanzadas
       const advancedCheckResult = this.advancedCheck(movedTask, kanban, fromColumnIndex);
-      console.log('advance check es');
-      console.log(advancedCheckResult);
+    //  console.log('advance check es');
+     // console.log(advancedCheckResult);
 
 
       if (advancedCheckResult.length > 0 || fromColumnIndex > toColumnIndex) {
@@ -49,8 +49,16 @@ class TaskController {
           if (!historyEntry) throw new Error('No hay historial para retroceder esta tarea');
 
           const { taskVersion } = historyEntry;
+          console.log('hisrotyEntry');
+          console.log(taskVersion);
+          const omitProperties = ['history', '__v', 'initDate', 'tags']
+          omitProperties.forEach(prop => {
+            delete taskVersion[prop]; // Elimina la propiedad de la clonación
+          });
           Object.assign(movedTask, structuredClone(taskVersion));
           console.log('retrocede');
+          console.log(movedTask);
+          
         } else {
           console.log('va a avanzar tarea');
 
@@ -135,7 +143,9 @@ console.log('clonada es:', clone);
       
       Object.assign(movedTaskDB, movedTask);
       
+      
       await movedTaskDB.save();
+      console.log('llega');
       // Agregar movimiento a la tarea
       movedTask.movements.push({
         user: 'API_USER',

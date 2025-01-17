@@ -144,7 +144,7 @@ const requeriment = find.requeriment;
       return;
     }
 
-    const fullDomain = `${req.protocol}://${req.headers.host}`;
+    const fullDomain = `https://${req.headers.host}`;
 
     const response = await axios.post('https://pay.oportuna.red/encodeQR', {
       userEmail: 'kevincastrillon31@gmail.com',

@@ -68,11 +68,9 @@ router.post('/', async (req, res) => {
          const req = findRq.requeriment;
          console.log('req es ', req);
          
-         if (Array.isArray(req.finalData)) {
-          req.finalData.push(data)
-        } else {
-          req.finalData = [data]
-        }
+         
+          req.finalData = data
+        
        console.log('retorna', req.finalData);
        
            return {

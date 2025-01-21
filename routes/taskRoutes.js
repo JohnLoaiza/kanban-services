@@ -72,23 +72,33 @@ console.log('BASE TASK ES ', baseTask);
       info,
       schedule: schedule || baseTask.schedule,
     };
+    var createdTask = null
+    createdTask = await Task.create(newTask);
 
-    const createdTask = await Task.create(newTask);
+    if(createdTask != null) {
+      res.status(201).json({
+        success: true,
+        message: 'Tarea creada exitosamente',
+        task: createdTask,
+      });
+  
+      return {
+        eventName: 'newLead',
+        data: {
+          kanbanId: parseInt(kanbanId),
+          columnId: columnToUpdate.id,
+          task: newTask,
+          message: 'Se ha insertado una nueva tarea',
+        },
+      };
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'No se pudo insertar tarea en la bd',
+      });
+    }
 
-    res.status(201).json({
-      message: 'Tarea creada exitosamente',
-      task: createdTask,
-    });
-
-    return {
-      eventName: 'newLead',
-      data: {
-        kanbanId: parseInt(kanbanId),
-        columnId: columnToUpdate.id,
-        task: newTask,
-        message: 'Se ha insertado una nueva tarea',
-      },
-    };
+    
   });
 });
 

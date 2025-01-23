@@ -1,6 +1,7 @@
 const express = require('express');
 const { Kanban, Task } = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
+const KanbanController = require('../controllers/kanbanController');
 
 
 const router = express.Router();
@@ -154,5 +155,20 @@ router.get('/bases/:id', async (req, res) => {
     res.status(200).json({ success: true, baseList: list });
   });
 });
+
+
+router.get('/model/:id', async (req, res) => {
+  console.log('model');
+  
+  DbConnect.bdProcess(res, async () => {
+    const { id } = req.params;
+
+    const model = await KanbanController.getModel(id);
+
+    res.status(200).json({ success: true, model: model });
+  });
+ }
+);
+
 
 module.exports = router;

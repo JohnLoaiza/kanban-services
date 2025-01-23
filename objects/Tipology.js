@@ -22,7 +22,7 @@
 
   
 
-    static getFormTipologiesOnly = async () => (await this.getTipologies()).filter((l) => l.isForm === 1);
+    static getFormTipologiesOnly = async () => (this.getTipologies()).filter((l) => l.isForm === 1);
 
      // Get lines from CW
      static getTipologies =  () => {

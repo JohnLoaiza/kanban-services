@@ -31,16 +31,16 @@ class KanbanController {
                     console.log( Tipology.tipologiesUpload);
                     
                     
-                    taskMap.requeriments.push({ id: r.id, extraData: this.extraData(r.tipologyId), 'tipology*': {id: r.tipologyId, despcription: flag.tipology.description},});
+                    finalList.push({ id: r.id, extraData: this.extraData(r.tipologyId), 'tipology*': {id: r.tipologyId, despcription: flag.tipology.description},});
                     addFlag = true;
                     taskFlag = true;
                 }
             }
-            taskFlag ? map.tasks.push(taskMap) : () => {}
+          //  taskFlag ? finalList.push(taskMap) : () => {}
         }
 
         if (addFlag) {
-            finalList.push(map);
+          //  finalList.push(map);
         }
     }
 
@@ -95,7 +95,7 @@ class KanbanController {
                     }
                     case 39:
                         return "Id del cliente"
-                case 57:
+                case 58:
                     return { radius: 'El radio a la redonda de la geocerca', lat: 'latitud de punto centro', lng: 'longitud del punto centro' }
         
                 default:

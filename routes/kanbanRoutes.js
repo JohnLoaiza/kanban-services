@@ -67,6 +67,8 @@ router.get('/', async (req, res) => {
         column.tasks = tasks; // Agregar las tareas a la columna
       }
     }
+console.log('retorna kanbans');
+console.log(kanbans);
 
     res.status(200).json(kanbans);
   });
@@ -90,7 +92,8 @@ router.get('/:id', async (req, res) => {
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
-
+    
+    
     res.status(200).json(kanban);
   });
 });
@@ -165,7 +168,7 @@ router.get('/model/:id', async (req, res) => {
 
     const model = await KanbanController.getModel(id);
 
-    res.status(200).json({ success: true, model: model });
+    res.status(200).json({ success: true, requiredData: model });
   });
  }
 );

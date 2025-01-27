@@ -162,6 +162,7 @@ const TaskSchema = new mongoose.Schema({
   },
   movements: { type: [mongoose.Schema.Types.Mixed], default: [] },
   state: { type: String, required: false },
+  requiredData: { type: [mongoose.Schema.Types.Mixed], required: false, default: [] },
 }, {
   toJSON: {
     transform: (doc, ret) => {

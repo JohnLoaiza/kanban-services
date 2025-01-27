@@ -47,7 +47,7 @@ router.get('/:kanbanId/:taskId', async (req, res) => {
 router.post('/:kanbanId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId } = req.params;
-    const { baseId, data } = req.body;
+    const { baseId, data, requiredData } = req.body;
     const { tags = [], info = '', schedule } = data;
 
     const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
@@ -71,6 +71,7 @@ console.log('BASE TASK ES ', baseTask);
       tags,
       info,
       schedule: schedule || baseTask.schedule,
+      requiredData: requiredData
     };
     var createdTask = null
     createdTask = await Task.create(newTask);

@@ -3,7 +3,7 @@ const { Kanban, Task } = require('../models/kanban');
 
 
 class TaskController {
-  static taskAdvance = async (taskId, isBack = false) => {
+  static taskAdvance = async (taskId, isBack = false, selectNewFormId = null) => {
     try {
       const movedTaskDB = await Task.findOne({ id: taskId })
       const kanbanDB = await Kanban.findOne({ id: parseInt(movedTaskDB.kanbanId) })
@@ -95,8 +95,14 @@ console.log('clonada es:', clone);
           console.log(advanceFilter);
 
 
-          if (advanceFilter.length === 1) {
-            const schema = advanceFilter[0];
+          if (advanceFilter.length === 1 || selectNewFormId != null) {
+            var schema
+            try {
+               schema = selectNewFormId != null ? advanceFilter.filter((t) => t.id === selectNewFormId)[0] : advanceFilter[0];
+
+            } catch (error) {
+              return {success: false, message: 'No se encontro siguiente estado con id ' + selectNewFormId}
+            }
             const omitProperties = ['id', 'movements', 'history', 'baseId', 'initDate', 'tags']; // Propiedades que no quieres clonar
 
             // Primero, clonar la tarea versión
@@ -120,7 +126,16 @@ console.log('clonada es:', clone);
             
 
           } else if (advanceFilter.length > 1) {
-            throw new Error('Se requiere intervención manual para avanzar con múltiples tareas posibles');
+          //  throw new Error('Se requiere intervención manual para avanzar con múltiples tareas posibles');
+          
+         return {success: true, 
+            multiple: true,
+            message: 'La tarea cumple los requisitos para avanzar a multiples posibilidades',
+            tasks: advanceFilter, 
+            currentTaskId: taskId,
+            fromColumnIndex: fromColumnIndex,
+            toColumnIndex: toColumnIndex 
+            };
           }
         }
       } else {
@@ -158,7 +173,8 @@ console.log('clonada es:', clone);
         kanban,
         { new: true }
       );
-      return { task: movedTask, fromColumnIndex: fromColumnIndex, toColumnIndex: toColumnIndex };
+      return {success: true, 
+        multiple: false, task: movedTask, fromColumnIndex: fromColumnIndex, toColumnIndex: toColumnIndex };
 
     } catch (error) {
       throw new Error(`Error al mover la tarea: ${error.message}`);

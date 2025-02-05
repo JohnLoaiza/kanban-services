@@ -173,33 +173,72 @@ router.delete('/:kanbanId/:taskId', async (req, res) => {
 router.post('/advance/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const {  taskId } = req.params;
+    const { selectNewFormId = null } = req.body;
+console.log('advance');
+console.log(taskId);
+console.log(selectNewFormId);
+
 
     const movedTask = await TaskController.taskAdvance(
-      parseInt(taskId)
+      parseInt(taskId),
+      false,
+      selectNewFormId
     );
 
-    if (!movedTask) {
+    if (movedTask == null) {
       return res.status(404).json({ message: 'No se pudo avanzar la tarea' });
-    }
-const kanbanId = movedTask.task.kanbanId;
-    res.status(200).json({
-      message: 'Tarea avanzada exitosamente',
-      task: movedTask.task,
-      fromColumnIndex: movedTask.fromColumnIndex,
-      toColumnIndex: movedTask.toColumnIndex,
-    });
-    const notificationData = {
-      kanbanId: parseInt(kanbanId),
-      task: movedTask.task,
-      fromColumnIndex: movedTask.fromColumnIndex,
-      toColumnIndex: movedTask.toColumnIndex,
-      message: 'Tarea avanzada a siguiente estado correctamente',
-    };
+    } 
 
-    return {
-      eventName: 'taskAdvance',
-      data: notificationData
+    if (movedTask.success){
+     
+
+      
+      if (movedTask.multiple) {
+        res.status(200).json({
+          success: true,
+          multiple: movedTask.multiple,
+          message: movedTask.message,
+          tasks: movedTask.tasks,
+
+        });
+        const notificationData = {
+          success: true,
+          multiple: movedTask.multiple,
+          message: movedTask.message,
+          tasks: movedTask.tasks,
+          currentTaskId: movedTask.currentTaskId
+        };
+        return {
+          eventName: 'taskAdvance',
+          data: notificationData
+        }
+      } else {
+        const kanbanId = movedTask.task.kanbanId;
+        res.status(200).json({
+          success: true,
+          message: 'Tarea avanzada exitosamente',
+          multiple: movedTask.multiple,
+          task: movedTask.task,
+          fromColumnIndex: movedTask.fromColumnIndex,
+          toColumnIndex: movedTask.toColumnIndex,
+        });
+        const notificationData = {
+          kanbanId: parseInt(kanbanId),
+          task: movedTask.task,
+          multiple: movedTask.multiple,
+          fromColumnIndex: movedTask.fromColumnIndex,
+          toColumnIndex: movedTask.toColumnIndex,
+          message: 'Tarea avanzada a siguiente estado correctamente',
+        };
+    
+        return {
+          eventName: 'taskAdvance',
+          data: notificationData
+        }
+      }
+      
     }
+
   });
 });
 

@@ -114,6 +114,7 @@ router.put('/:kanbanId/:taskId', async (req, res) => {
       id: parseInt(taskId),
       kanbanId: parseInt(kanbanId),
     });
+    
     if (!task) {
       return res.status(404).json({ message: 'Tarea no encontrada' });
     }

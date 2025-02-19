@@ -16,6 +16,7 @@ const RequerimentSchema = new mongoose.Schema({
   finishedDate: { type: Number, required: false },
   mandatory: { type: Boolean, required: false },
   tipologyId: { type: Number, required: false },
+  assignedRol: { type: String, required: false }
 }, {
   toJSON: {
     transform: (doc, ret) => {
@@ -235,6 +236,7 @@ const KanbanSchema = new mongoose.Schema({
   id: { type: Number, default: generateId },
   nombre: { type: String, required: true },
   columns: { type: [ColumnSchema], default: [] },
+  roles: { type: [String], default: [] },
 }, {
   toJSON: {
     transform: (doc, ret) => {

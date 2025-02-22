@@ -49,16 +49,18 @@ class DbConnect {
                 if (isOpen) {
                     const notifyData = await process()
                     console.log('notify data es');
-                    console.log(notifyData);
+                  //  console.log(notifyData);
 
                     try {
                         const response = await axios.post(this.socketUrl, {
                             actionTodo: notifyData.eventName,
                             data: notifyData.data,
                         });
-                        console.log('Notificación enviada:', response.data);
+                        console.log('Notificación enviada:');
+                    //    console.log(notifyData);
+                        
                     } catch (notificationError) {
-                        console.error('Error al enviar notificación:', notificationError.message);
+                        console.error('Error al enviar notificación:');
                     }
                 } else {
                     res.status(500).json({ message: 'No se pudo conectar con la BD' });

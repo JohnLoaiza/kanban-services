@@ -5,10 +5,14 @@ const { Kanban, Task } = require('../models/kanban');
 class TaskController {
 
 
-  static  getTask = async (kanbanId, taskId) => await Task.findOne({
-    id: parseInt(taskId),
-    kanbanId: parseInt(kanbanId),
-  });
+  static  getTask = async (kanbanId, taskId) => {
+console.log('Buscar tarea dependiente');
+
+    return await Task.findOne({
+      id: parseInt(taskId),
+      kanbanId: parseInt(kanbanId),
+    })
+  };
 
 
   static taskAdvance = async (taskId, isBack = false, selectNewFormId = null) => {

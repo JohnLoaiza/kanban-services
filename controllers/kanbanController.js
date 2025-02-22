@@ -5,9 +5,13 @@ const Tipology = require("../objects/Tipology");
 class KanbanController {
 
     static getKanban = async (kanbanId, tasksOn = false) => {
+        console.log('busca kanban');
+        
         const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
     if (tasksOn) {
         for (const column of kanban.columns) {
+            console.log('iguala tareas');
+            
             const tasks = await Task.find({
               kanbanId: parseInt(kanban.id),
               columnId: parseInt(column.id),

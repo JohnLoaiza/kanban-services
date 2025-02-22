@@ -17,13 +17,15 @@ router.get('/:kanbanId/:taskId', async (req, res) => {
     const dependTask = await TaskController.getTask(kanbanId, taskId);
 
    const adminTask = await AdminTaskController.getAdminTask(kanbanId,dependTask.baseId, res);
-   console.log("adminTask es ")
-   console.log(adminTask);
-   
 
    const column = await ColumnController.getColumn(kanbanId, dependTask.columnId)
     res.status(200).json({ success: true, adminTask, column });
+    return {
+      eventName: '',
+      data: {}
+    }
   });
+ 
 });
 
 

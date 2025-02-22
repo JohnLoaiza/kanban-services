@@ -33,6 +33,8 @@ class AdminTaskController {
     }
 
     static getAdminTask = async (kanbanId, taskId, res) => {
+      console.log('busca kanban');
+      
         const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });

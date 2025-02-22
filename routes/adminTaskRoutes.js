@@ -2,18 +2,27 @@ const express = require('express');
 const { Kanban } = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 const AdminTaskController = require('../controllers/adminTaskController');
+const TaskController = require('../controllers/taskController');
+const  ColumnController  = require('../controllers/columnController');
 
 
 const router = express.Router();
 
 
-// Obtener una tarea admin específica
+// Obtener una tarea admin específica según el id de una tarea dependiente
 router.get('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId, taskId } = req.params;
 
-   const task = await AdminTaskController.getAdminTask(kanbanId,taskId, res)
-    res.status(200).json({ success: true, task });
+    const dependTask = await TaskController.getTask(kanbanId, taskId);
+
+   const adminTask = await AdminTaskController.getAdminTask(kanbanId,dependTask.baseId, res);
+   console.log("adminTask es ")
+   console.log(adminTask);
+   
+
+   const column = await ColumnController.getColumn(kanbanId, dependTask.columnId)
+    res.status(200).json({ success: true, adminTask, column });
   });
 });
 

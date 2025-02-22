@@ -1,8 +1,22 @@
-const { Kanban } = require("../models/kanban");
+const { Kanban, Task } = require("../models/kanban");
 const Tipology = require("../objects/Tipology");
 
 
 class KanbanController {
+
+    static getKanban = async (kanbanId, tasksOn = false) => {
+        const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
+    if (tasksOn) {
+        for (const column of kanban.columns) {
+            const tasks = await Task.find({
+              kanbanId: parseInt(kanban.id),
+              columnId: parseInt(column.id),
+            });
+            column.tasks = tasks; // Agregar las tareas a la columna
+          }
+    }
+    return kanban;
+    }
 
         static getModel = async (id) => {
             

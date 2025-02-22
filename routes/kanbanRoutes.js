@@ -20,19 +20,11 @@ router.post('/', async (req, res) => {
       }
       console.log('kanban entrante es');
       console.log( req.body);
-      
      var k = req.body
-     
-   
-    
-    
       // Crear el nuevo Kanban si no existe uno con el mismo ID
       const kanban = new Kanban(k);
       console.log('en modelo');
       console.log(kanban);
-      
-   
-      
       const savedKanban = await kanban.save();
       const notificationData = {
         newKanban: kanban,
@@ -76,19 +68,13 @@ console.log(kanbans);
 
 
 // Obtener un Kanban por ID
-router.get('/:id', async (req, res) => {
+router.get('/:id/:taskOn?', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const kanbanId = req.params.id;
+    const taskOn = req.params.taskOn ?? true;
 
     // Buscar por id en lugar de _id
-    const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
-    for (const column of kanban.columns) {
-      const tasks = await Task.find({
-        kanbanId: parseInt(kanban.id),
-        columnId: parseInt(column.id),
-      });
-      column.tasks = tasks; // Agregar las tareas a la columna
-    }
+    const kanban = await KanbanController.getKanban(kanbanId, taskOn);
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }

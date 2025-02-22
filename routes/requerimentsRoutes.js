@@ -3,6 +3,8 @@ const Kanban = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 const RequerimentController = require('../controllers/requerimentController');
 const axios = require('axios');
+const { eventNames } = require('../models/user');
+const TaskController = require('../controllers/taskController');
 
 
 const router = express.Router();
@@ -77,6 +79,8 @@ router.put('/:kanbanId/:taskId/:requerimentId', async (req, res) => {
         eventName: 'updateRequeriment',
         data : notificationData
       }
+        
+       
     } else {
       res.status(400).json({
         message: 'No se pudo actualizar el requisito',

@@ -30,7 +30,7 @@ router.get('/:kanbanId/:taskId', async (req, res) => {
   return DbConnect.bdProcess(res, async () => {
     const { kanbanId, taskId } = req.params;
 
-    const task = await TaskController.getTask(kanbanId, taskId)
+    const task = await TaskController.getTask(taskId)
 
     if (!task) {
       return res.status(404).json({ message: 'Tarea no encontrada' });

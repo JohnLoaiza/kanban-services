@@ -14,7 +14,7 @@ router.get('/:kanbanId/:taskId', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { kanbanId, taskId } = req.params;
 
-    const dependTask = await TaskController.getTask(kanbanId, taskId);
+    const dependTask = await TaskController.getTask(taskId);
 
    const adminTask = await AdminTaskController.getAdminTask(kanbanId,dependTask.baseId, res);
 

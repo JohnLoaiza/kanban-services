@@ -5,12 +5,11 @@ const { Kanban, Task } = require('../models/kanban');
 class TaskController {
 
 
-  static  getTask = async (kanbanId, taskId) => {
+  static  getTask = async (taskId) => {
 console.log('Buscar tarea dependiente');
 
     return await Task.findOne({
       id: parseInt(taskId),
-      kanbanId: parseInt(kanbanId),
     })
   };
 

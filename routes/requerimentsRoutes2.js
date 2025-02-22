@@ -4,6 +4,7 @@ const DbConnect = require('../bd/dbConnect');
 const RequerimentController = require('../controllers/requerimentController');
 const axios = require('axios');
 const AdminTaskController = require('../controllers/adminTaskController');
+const TaskController = require('../controllers/taskController');
 
 
 const router = express.Router();
@@ -81,7 +82,7 @@ router.put('/:taskId/:requerimentId', async (req, res) => {
         message: 'Requerimiento actualizado exitosamente',
         requeriment: updated.requeriment,
       });
-
+/*
       return {
         eventName: 'updateRequeriment',
         data: {
@@ -91,7 +92,16 @@ router.put('/:taskId/:requerimentId', async (req, res) => {
           requeriment: updated.requeriment,
           message: 'Se ha actualizado un requisito',
         },
-      };
+      }; */
+      return {
+        eventName: 'updateLead',
+        data: {
+          kanbanId: updated.kanbanId,
+          columnId: updated.columnId,
+          task: await TaskController.getTask(taskId),
+          message: 'Se ha actualizado una tarea',
+        }
+       }
     } else {
       res.status(400).json({
         message: 'No se pudo actualizar el requisito',

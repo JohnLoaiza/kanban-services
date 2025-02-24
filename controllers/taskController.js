@@ -1,3 +1,5 @@
+const DbConnect = require('../bd/dbConnect');
+const { bdProcess } = require('../bd/dbConnect');
 const { Kanban, Task } = require('../models/kanban');
 
 
@@ -6,11 +8,14 @@ class TaskController {
 
 
   static  getTask = async (taskId) => {
+    var task;
 console.log('Buscar tarea dependiente');
-
-    return await Task.findOne({
-      id: parseInt(taskId),
-    })
+// await DbConnect.open()
+ task = await Task.findOne({
+    id: parseInt(taskId),
+  })
+ // await DbConnect.close()
+    return task
   };
 
 

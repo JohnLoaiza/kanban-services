@@ -1,3 +1,4 @@
+const DbConnect = require('../bd/dbConnect');
 const { Kanban } = require('../models/kanban');
 
 
@@ -34,8 +35,10 @@ class AdminTaskController {
 
     static getAdminTask = async (kanbanId, taskId, res) => {
       console.log('busca kanban');
-      
+      // await DbConnect.open()
+
         const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
+      //  await DbConnect.close()
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }

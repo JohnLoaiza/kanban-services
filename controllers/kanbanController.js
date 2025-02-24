@@ -1,3 +1,4 @@
+const DbConnect = require("../bd/dbConnect");
 const { Kanban, Task } = require("../models/kanban");
 const Tipology = require("../objects/Tipology");
 
@@ -6,8 +7,9 @@ class KanbanController {
 
     static getKanban = async (kanbanId, tasksOn = false) => {
         console.log('busca kanban');
-        
+      //  await DbConnect.open()
         const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
+      //  await DbConnect.close()
     if (tasksOn) {
         for (const column of kanban.columns) {
             console.log('iguala tareas');

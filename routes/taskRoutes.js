@@ -2,8 +2,7 @@ const express = require('express');
 const { Kanban, Task } = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 const TaskController = require('../controllers/taskController');
-
-
+const axios = require('axios');
 const router = express.Router();
 
 
@@ -26,9 +25,9 @@ router.delete('/empty', async (req, res) => {
 
 
 // Obtener una tarea específica
-router.get('/:kanbanId/:taskId', async (req, res) => {
+router.get('/:taskId', async (req, res) => {
   return DbConnect.bdProcess(res, async () => {
-    const { kanbanId, taskId } = req.params;
+    const { taskId } = req.params;
 
     const task = await TaskController.getTask(taskId)
 
@@ -273,6 +272,37 @@ const kanbanId = movedTask.task.kanbanId;
       eventName: 'taskAdvance',
       data: notificationData
     }
+  });
+});
+
+
+// Resolver una tarea con determinado rol
+router.get('/solve/:taskId/:rol', async (req, res) => {
+  DbConnect.bdProcess(res, async () => {
+    const { taskId, rol } = req.params;
+
+  
+    const fullDomain = `https://${req.headers.host}`;
+
+    const response = await axios.post('https://pay.oportuna.red/encodeQR', {
+      userEmail: 'kevincastrillon31@gmail.com',
+      type: 'widget',
+      lifeTime: 600,
+      webhook: `${fullDomain}/api/webhook/`,
+      widgetId: 1000,
+      marketPlace: {
+        taskId: taskId,
+        rol: rol,
+      },
+    });
+
+    const data = response.data;
+
+    res.status(201).json({
+      success: true,
+      message: 'Ruta encontrada',
+      url: `https://opordanban.vercel.app/token/${data.encodeQR}`,
+    });
   });
 });
 

@@ -70,12 +70,15 @@ class DbConnect {
             }
 
             const notifyData = await process();
+            if (notifyData == null) return;
             console.log('📢 Notificación enviada:', notifyData);
 
             try {
                 await axios.post(this.socketUrl, {
                     actionTodo: notifyData.eventName,
                     data: notifyData.data,
+                    resId: parseInt(Math.random()*9000000+1000000)
+                    
                 });
             } catch (notificationError) {
                 console.error('❌ Error al enviar notificación:', notificationError);

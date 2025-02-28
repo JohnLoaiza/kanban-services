@@ -71,7 +71,7 @@ class DbConnect {
 
             const notifyData = await process();
             if (notifyData == null) return;
-            console.log('📢 Notificación enviada:', notifyData);
+            console.log('📢 Notificación enviada');
 
             try {
                 await axios.post(this.socketUrl, {

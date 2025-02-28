@@ -71,8 +71,7 @@ console.log(kanbans);
 router.get('/:id/:taskOn?', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const kanbanId = req.params.id;
-    const taskOn = req.params.taskOn ?? true;
-
+    const taskOn = (req.params.taskOn) ?? true;
     // Buscar por id en lugar de _id
     const kanban = await KanbanController.getKanban(kanbanId, taskOn);
     if (!kanban) {

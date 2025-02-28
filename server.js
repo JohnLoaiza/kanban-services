@@ -6,6 +6,7 @@ const adminTasksRoutes = require('./routes/adminTaskRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const requerimentsRoutes = require('./routes/requerimentsRoutes2');
 const userRoutes = require('./routes/userRoutes');
+const rolesRoutes = require('./routes/rolesRoutes');
 const tipologyRoutes = require('./routes/tipologyRoutes');
 const webhook = require('./routes/webhook');
 const DbConnect = require('./bd/dbConnect');
@@ -36,6 +37,7 @@ app.use('/api/requeriments', requerimentsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/webhook', webhook);
 app.use('/api/tipologies', tipologyRoutes);
+app.use('/api/roles', rolesRoutes)
 app.use('/api', router);
 
 

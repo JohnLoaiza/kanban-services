@@ -9,8 +9,9 @@ class KanbanController {
         console.log('busca kanban');
       //  await DbConnect.open()
         const kanban = await Kanban.findOne({ id: parseInt(kanbanId) });
+        if (!kanban) return null;
       //  await DbConnect.close()
-    if (tasksOn) {
+    if (tasksOn && kanban.columns) {
         for (const column of kanban.columns) {
             console.log('iguala tareas');
             

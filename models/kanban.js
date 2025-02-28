@@ -286,5 +286,6 @@ const KanbanSchema = new mongoose.Schema({
 
  const Task = mongoose.model('Task', TaskSchema);
  const Kanban = mongoose.model('Kanban', KanbanSchema);
+ const Rol = mongoose.model('Rol', RolSchema);
 
-module.exports = { Task, Kanban, generateId };
+module.exports = { Task, Kanban, generateId, Rol};

@@ -68,12 +68,11 @@ console.log(kanbans);
 
 
 // Obtener un Kanban por ID
-router.get('/:id/:taskOn?', async (req, res) => {
+router.get('/:id', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const kanbanId = req.params.id;
-    const taskOn = (req.params.taskOn) ?? true;
     // Buscar por id en lugar de _id
-    const kanban = await KanbanController.getKanban(kanbanId, taskOn);
+    const kanban = await KanbanController.getKanban(kanbanId, true);
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
     }
@@ -129,7 +128,8 @@ router.delete('/:id', async (req, res) => {
 router.get('/bases/:id', async (req, res) => {
   DbConnect.bdProcess(res, async () => {
     const { id } = req.params;
-
+ console.log('entra bases');
+ 
     const kanban = await Kanban.findOne({ id: parseInt(id) });
     if (!kanban) {
       return res.status(404).json({ message: 'Kanban no encontrado' });
@@ -141,7 +141,9 @@ router.get('/bases/:id', async (req, res) => {
     const list = kanban.columns[0].adminTasks.map((t) => {return {baseId: t.id, title: t.title, description: t.description}})
 
     res.status(200).json({ success: true, baseList: list });
-  });
+  },
+  (e) => console.log("Error en generar base tasks para el kanban con ID " + id, e)
+);
 });
 
 

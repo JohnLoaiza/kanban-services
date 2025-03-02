@@ -61,7 +61,7 @@ class DbConnect {
         }
     }
 
-    static async bdProcess(res, process) {
+    static async bdProcess(res, process, processException) {
         try {
             const isOpen = await this.open();
             if (!isOpen) {
@@ -69,7 +69,17 @@ class DbConnect {
                 return;
             }
 
-            const notifyData = await process();
+           
+            var notifyData;
+            try {
+                 notifyData = await process();
+            } catch (e) {
+                console.log("Error en ejecución de proceso");
+                console.log(e);
+                processException ?  processException(e) : () => {};
+            }
+
+
             if (notifyData == null) return;
             console.log('📢 Notificación enviada');
 

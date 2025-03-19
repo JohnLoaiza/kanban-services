@@ -5,6 +5,7 @@ const RequerimentController = require('../controllers/requerimentController');
 const axios = require('axios');
 const { eventNames } = require('../models/user');
 const TaskController = require('../controllers/taskController');
+const { qrApiEnconde } = require('../configs');
 
 
 const router = express.Router();
@@ -146,7 +147,7 @@ router.get('/solve/:kanbanId/:taskId/:requerimentId', async (req, res) => {
     console.log('full domain: ' + fullDomain);
     
     
-    const response = await axios.post('https://pay.oportuna.red/encodeQR', {
+    const response = await axios.post(qrApiEnconde, {
       "userEmail": "kevincastrillon31@gmail.com",
       "type": "widget",
       "lifeTime": 600,

@@ -3,6 +3,7 @@ const { Kanban, Task } = require('../models/kanban');
 const DbConnect = require('../bd/dbConnect');
 const TaskController = require('../controllers/taskController');
 const axios = require('axios');
+const { qrApiDecode, qrApiEnconde } = require('../configs');
 const router = express.Router();
 
 
@@ -188,16 +189,12 @@ console.log(selectNewFormId);
     } 
 
     if (movedTask.success){
-     
-
-      
       if (movedTask.multiple) {
         res.status(200).json({
           success: true,
           multiple: movedTask.multiple,
           message: movedTask.message,
           tasks: movedTask.tasks,
-
         });
         const notificationData = {
           success: true,
@@ -285,7 +282,7 @@ router.get('/solve/:taskId/:rol', async (req, res) => {
   
     const fullDomain = `https://${req.headers.host}`;
 
-    const response = await axios.post('https://pay.oportuna.red/encodeQR', {
+    const response = await axios.post(qrApiEnconde, {
       userEmail: 'kevincastrillon31@gmail.com',
       type: 'widget',
       lifeTime: 600,

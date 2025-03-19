@@ -5,6 +5,7 @@ const RequerimentController = require('../controllers/requerimentController');
 const axios = require('axios');
 const AdminTaskController = require('../controllers/adminTaskController');
 const TaskController = require('../controllers/taskController');
+const { qrApiDecode, qrApiEnconde, widgetsUrl } = require('../configs');
 
 
 const router = express.Router();
@@ -156,7 +157,7 @@ const requeriment = find.requeriment;
 
     const fullDomain = `https://${req.headers.host}`;
 
-    const response = await axios.post('https://pay.oportuna.red/encodeQR', {
+    const response = await axios.post(qrApiEnconde, {
       userEmail: 'kevincastrillon31@gmail.com',
       type: 'widget',
       lifeTime: 600,
@@ -174,7 +175,7 @@ const requeriment = find.requeriment;
     res.status(201).json({
       success: true,
       message: 'Ruta encontrada',
-      url: `https://oportunawidgets.web.app/widget/${data.encodeQR}`,
+      url: widgetsUrl + `/${data.encodeQR}`,
     });
   });
 });

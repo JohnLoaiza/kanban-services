@@ -56,7 +56,7 @@ class AdminTaskController {
 
     const task = column.adminTasks.find((adminTask) => adminTask.id === parseInt(taskId));
 
-    return task;
+    return {task, roles: kanban.roles};
     }
 }
 

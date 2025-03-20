@@ -18,15 +18,15 @@ router.get('/:taskId', async (req, res) => {
       id: parseInt(taskId),
     });
 
-   const adminTask = await AdminTaskController.getAdminTask(dependTask.kanbanId,dependTask.baseId, res);
-
-
+   const adminTaskResponse = await AdminTaskController.getAdminTask(dependTask.kanbanId,dependTask.baseId, res);
+   const adminTask = adminTaskResponse.task;
+   const roles = adminTaskResponse.roles
 
      const column = await ColumnController.getColumn(dependTask.kanbanId, dependTask.columnId)
 
       
 
-    res.status(200).json({ success: true, adminTask, column });
+    res.status(200).json({ success: true, adminTask, column, roles });
     return {
       eventName: '',
       data: {}

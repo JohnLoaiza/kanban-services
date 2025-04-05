@@ -18,8 +18,8 @@ class DbConnect {
 
     static async open() {
         if (this.isConnected) {
-            console.log('⚡ BD ya está conectada. Reiniciando temporizador...');
-            this.resetCloseTimer();
+           // console.log('⚡ BD ya está conectada. Reiniciando temporizador...');
+           // this.resetCloseTimer();
             return true;
         }
 
@@ -27,7 +27,7 @@ class DbConnect {
             await mongoose.connect(this.db, this.options);
             this.isConnected = true;
             console.log('✅ Conectado a la BD');
-            this.resetCloseTimer(); // Inicia el temporizador después de conectar
+           // this.resetCloseTimer(); // Inicia el temporizador después de conectar
             return true;
         } catch (error) {
             console.error('❌ Error al conectar la BD:', error);
@@ -55,7 +55,7 @@ class DbConnect {
         try {
             await mongoose.disconnect();
             this.isConnected = false;
-            console.log('🔒 BD cerrada por inactividad');
+            console.log('🔒 BD cerrada');
         } catch (error) {
             console.error('❌ Error al cerrar la BD:', error);
         }
@@ -95,10 +95,12 @@ class DbConnect {
             }
 
             // Reinicia el temporizador para evitar el cierre prematuro
-            this.resetCloseTimer();
+          //  this.resetCloseTimer();
         } catch (error) {
             console.error('❌ Error en bdProcess:', error);
             res.status(500).json({ success: false, message: 'No se pudo procesar la base de datos', info: error });
+        } finally {
+            this.close()
         }
     }
 }
